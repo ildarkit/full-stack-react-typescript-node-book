@@ -1,5 +1,7 @@
 :root {
   --min-screen-height: 1000px;
+  --border-color: gray;
+  --border: solid 0.1em var(--border-color);
 }
 
 .App {
@@ -40,11 +42,32 @@
   background-color: coral;
 }
 
+.modal-menu {
+  position: fixed;
+  min-width: 550px;
+  left: 50%;
+  top: 4.5em;
+  transform: translate(-50%);
+  border: var(--border);
+  border-radius: 5px;
+  background-color: white;
+  padding: 1em 1em 1em 1em;
+  z-index: 1000;
+}
+
 @media screen and (orientation: portrait) and (max-width: 768px) {
   .App {
     grid-template-columns: 1fr;
     grid-template-areas:
       "nav"
       "content";
+  }
+
+  .modal-menu {
+    min-width: 60px;
+    left: 0.5em;
+    right: 0.5em;
+    top: 3.5em;
+    transform: translate(0%);
   }
 }
