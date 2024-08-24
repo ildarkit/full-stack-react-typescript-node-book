@@ -1,7 +1,7 @@
-import {useWindowDimentions} from "../hooks/useWindowDimensions";
+import {useWindowDimensions} from "../hooks/useWindowDimensions";
 
 const RightMenu = () => {
-  const {width} = useWindowDimentions();
+  const {width} = useWindowDimensions();
   if (width <= 768) return null;
   return <div className="rightmenu">Right Menu</div>;
 };
