@@ -2,7 +2,7 @@ import {FC} from 'react';
 import Nav from '../areas/Nav';
 import Sidebar from '../areas/sidebar/Sidebar';
 import LeftMenu from '../areas/LeftMenu';
-import RightMenu from '../areas/RightMenu';
+import RightMenu from '../areas/rightMenu/RightMenu';
 import Main from '../areas/main/Main';
 import './Home.css';
 

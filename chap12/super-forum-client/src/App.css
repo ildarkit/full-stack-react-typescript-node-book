@@ -132,6 +132,10 @@ input[type="submit"]:hover {
   margin-top: 0.5em;
 }
 
+.clickable-span {
+  cursor: pointer;
+}
+
 @media screen and (orientation: portrait) and (max-width: 768px) {
   .App {
     grid-template-columns: 1fr;
