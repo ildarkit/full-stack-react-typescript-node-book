@@ -124,6 +124,12 @@ input[type="submit"]:hover {
   padding-top: 0.8em;
 }
 
+.title-bar {
+  margin-bottom: 0.4em;
+  padding-bottom: 0.25em !important;
+  border-bottom: 3px solid var(--input-border-color);
+}
+
 @media screen and (orientation: portrait) and (max-width: 768px) {
   .App {
     grid-template-columns: 1fr;
