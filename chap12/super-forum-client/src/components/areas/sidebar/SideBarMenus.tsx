@@ -7,12 +7,12 @@ import {
   faSignInAlt,
   faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
-import {AppState} from '../../store/AppState';
-import {UserProfileSetType} from '../../store/user/Reducer';
-import Registration from '../auth/Registration';
+import {AppState} from '../../../store/AppState';
+import {UserProfileSetType} from '../../../store/user/Reducer';
+import Registration from '../../auth/Registration';
 import './SideBarMenus.css';
-import Login from '../auth/Login';
-import Logout from '../auth/Logout';
+import Login from '../../auth/Login';
+import Logout from '../../auth/Logout';
 
 const SideBarMenus = () => {
   const [showRegister, setShowRegister] = useState(false);

@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {useWindowDimensions} from '../hooks/useWindowDimensions';
+import {useWindowDimensions} from '../../hooks/useWindowDimensions';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faBars} from '@fortawesome/free-solid-svg-icons';
 import ReactModal from 'react-modal';
