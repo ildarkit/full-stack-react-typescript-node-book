@@ -8,6 +8,7 @@ import ThreadModel from "../../../models/Thread";
 import { getThreadById } from "../../../services/DataService";
 import Nav from "../../areas/Nav";
 import ThreadBody from './ThreadBody';
+import ThreadResponsesBuilder from "./ThreadResponsesBuilder";
 
 const Thread = () => {
   const [thread, setThread] = useState<ThreadModel | undefined>();
@@ -37,6 +38,8 @@ const Thread = () => {
           <ThreadCategory categoryName={thread?.category?.name} />
           <ThreadTitle title={thread?.title} />
           <ThreadBody body={thread?.body}/>
+          <hr className="thread-section-divider" />
+          <ThreadResponsesBuilder threadItems={thread?.threadItems} />
         </div> 
       </div> 
     </div>
