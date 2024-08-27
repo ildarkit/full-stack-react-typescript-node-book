@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
   faUser,
@@ -8,7 +8,6 @@ import {
   faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
 import {AppState} from '../../../store/AppState';
-import {UserProfileSetType} from '../../../store/user/Reducer';
 import Registration from '../../auth/Registration';
 import './SideBarMenus.css';
 import Login from '../../auth/Login';

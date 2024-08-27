@@ -1,10 +1,10 @@
 import React, {FC, useReducer} from 'react';
 import ReactModal from 'react-modal';
 import './Registration.css';
-import {PasswordTestResult, isPasswordValid} from '../../common/validators/PasswordValidator';
 import {ModalProps} from '../types/ModalProps';
 import {userReducer} from '../auth/common/UserReducer';
 import {allowSubmit} from '../auth/common/Helpers'; 
+import PasswordComparison from './common/PasswordComparison';
 
 const Registration: FC<ModalProps> = ({isOpen, onClickToggle}) => {
   const [
@@ -30,30 +30,6 @@ const Registration: FC<ModalProps> = ({isOpen, onClickToggle}) => {
     if (!e.target.value) allowSubmit(dispatch, "Email cannot be empty", true)
     else allowSubmit(dispatch, "", false);
   }; 
-
-  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({payload: e.target.value, type: "password"});
-    const passwordCheck: PasswordTestResult = isPasswordValid(e.target.value);
-    if (!passwordCheck.isValid) {
-      allowSubmit(dispatch, passwordCheck.message, true);
-      return;
-    }
-    passwordsSame(passwordConfirm, e.target.value);
-  };
-
-  const onChangePasswordConfirm = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({payload: e.target.value, type: "passwordConfirm"});
-    passwordsSame(password, e.target.value);
-  };
-
-  const passwordsSame = (passwordVal: string, passwordConfirmVal: string) => {
-    if (passwordVal !== passwordConfirmVal) {
-      allowSubmit(dispatch, "Password do not match", true);
-      return false;
-    }
-    allowSubmit(dispatch, "", false);
-    return true;
-  };
 
   const onClickRegister = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
@@ -82,20 +58,11 @@ const Registration: FC<ModalProps> = ({isOpen, onClickToggle}) => {
             <input type="email" value={email} onChange={onChangeEmail}/>
           </div>
           <div>
-            <label>password</label>
-            <input
-              type="password"
-              placeholder="Password"
-              value={password} 
-              onChange={onChangePassword}/>
-          </div>
-          <div>
-            <label>password conformation</label>
-            <input
-              type="password"
-              placeholder="Password Conformation"
-              value={passwordConfirm} 
-              onChange={onChangePasswordConfirm}/>
+            <PasswordComparison
+              dispatch={dispatch}
+              password={password}
+              passwordConfirm={passwordConfirm}
+            /> 
           </div>
         </div>
         <div className="reg-buttons">
