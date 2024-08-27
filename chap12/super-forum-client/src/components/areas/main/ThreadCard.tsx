@@ -2,7 +2,7 @@ import {FC} from 'react';
 import './ThreadCard.css';
 import Thread from '../../../models/Thread';
 import {Link, useNavigate} from 'react-router-dom';
-import {faEye, faHeart, faReplyAll} from '@fortawesome/free-solid-svg-icons';
+import {faEye, faReplyAll} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {useWindowDimensions} from '../../../hooks/useWindowDimensions';
 import ThreadPointsBar from '../../ThreadPointsBar';

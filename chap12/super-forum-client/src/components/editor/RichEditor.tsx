@@ -51,6 +51,7 @@ const RichEditor: FC<RichEditorProps> = ({ existingBody }) => {
     if (existingBody) {
       setValue([
         {
+          type: "paragraph",
           text: existingBody,
         },
       ]);
