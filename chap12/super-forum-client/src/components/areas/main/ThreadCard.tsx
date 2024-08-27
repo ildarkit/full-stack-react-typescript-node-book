@@ -6,6 +6,7 @@ import {faEye, faHeart, faReplyAll} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {useWindowDimensions} from '../../../hooks/useWindowDimensions';
 import ThreadPointsBar from '../../ThreadPointsBar';
+import ThreadPointsInline from '../../ThreadPointsInline';
 
 interface ThreadCardProps {
   thread: Thread;
@@ -17,30 +18,7 @@ const ThreadCard: FC<ThreadCardProps> = ({thread}) => {
 
   const onClickShowThread = (e: React.MouseEvent<HTMLDivElement>) => {
     navigate("/thread/" + thread.id);
-  };
-  
-  const getPoint = (thread: Thread) => {
-    if (width <= 768) {
-      return (
-        <label
-          style={{
-            marginRight: ".75em",
-            marginTop: ".25em",
-          }}
-        >
-          {thread.points | 0}
-          <FontAwesomeIcon
-            icon={faHeart}
-            className="points-icon"
-            style={{
-              marginLeft: ".2em",
-            }}
-          />
-        </label>
-      );
-    }
-    return null;
-  };
+  }; 
 
   const getResponses = (thread: Thread) => {
     if (width <= 768) {
@@ -112,7 +90,9 @@ const ThreadCard: FC<ThreadCardProps> = ({thread}) => {
               </label>
             </span>
             <span>
-              {getPoint(thread)}
+              {width <= 768 ? (
+                <ThreadPointsInline points={thread?.points || 0}/>
+              ) : null}
               {getResponses(thread)}
             </span>
           </div>
