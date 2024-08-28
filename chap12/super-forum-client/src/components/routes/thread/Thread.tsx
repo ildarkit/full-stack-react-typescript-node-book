@@ -16,9 +16,9 @@ const Thread = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    console.log("Thread id", id);
-    if (id && Number(id) > 0) {
-      getThreadById(id).then((th) => {
+    const parsed = id ? Number.parseInt(id) : undefined;
+    if (parsed && !Number.isNaN(parsed) && parsed > 0) {
+      getThreadById(parsed).then((th) => {
         setThread(th);
       });
     }

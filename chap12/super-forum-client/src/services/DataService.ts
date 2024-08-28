@@ -145,7 +145,7 @@ export async function getTopCategories(): Promise<Array<CategoryThread>> {
   return promise;
 }
 
-export async function getThreadById(Id: string): Promise<Thread> {
+export async function getThreadById(Id: Number): Promise<Thread> {
   const promise = new Promise<Thread>((res, rej) => {
     setTimeout(() => {
       const thread = {
