@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, FC } from "react";
+import { useState, useCallback, useMemo, useEffect, FC } from "react";
 import { Editable, withReact, useSlate, Slate } from "slate-react";
 import { 
   Editor,
@@ -50,6 +50,10 @@ const RichEditor: FC<RichEditorProps> = ({ existingBody }) => {
   const renderElement = useCallback((props: any) => <Element {...props} />, []);
   const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
   const editor = useMemo(() => withHistory(withReact(createEditor())), []); 
+
+  useEffect(() => {
+    setValue(initValue(existingBody));
+  }, [existingBody]);
 
   const onChangeEditorValue = (value: Descendant[]) => {
     setValue(value);
