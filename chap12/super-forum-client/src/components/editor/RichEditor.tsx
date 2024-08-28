@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect, FC } from "react";
+import { useState, useCallback, useMemo, FC } from "react";
 import { Editable, withReact, useSlate, Slate } from "slate-react";
 import { 
   Editor,
@@ -29,37 +29,30 @@ const HOTKEYS: { [keyName: string]: string } = {
   "mod+u": "underline",
   "mod+`": "code",
 };
-const initialValue: Descendant[] = [
-  {
-    type: "paragraph",
-    children: [{ text: "Enter your post here." }],
-  },
-];
+
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
+
+const INITIAL_VALUE: Descendant = {
+  type: "paragraph",
+  children: [{text: "Enter your post here."}],
+};
+
+function initValue(val: string | undefined): Descendant[] {
+  return val ? [{...INITIAL_VALUE, children: [{text: val}]}] : [INITIAL_VALUE];
+} 
 
 interface RichEditorProps {
   existingBody?: string;
 }
 
 const RichEditor: FC<RichEditorProps> = ({ existingBody }) => {
-  const [value, setValue] = useState<Descendant[]>(initialValue);
+  const [value, setValue] = useState<Descendant[]>(() => initValue(existingBody));
   const renderElement = useCallback((props: any) => <Element {...props} />, []);
   const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
-  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+  const editor = useMemo(() => withHistory(withReact(createEditor())), []); 
 
-  useEffect(() => {
-    if (existingBody) {
-      setValue([
-        {
-          type: "paragraph",
-          text: existingBody,
-        },
-      ]);
-    }
-  }, []);
-
-  const onChangeEditorValue = (val: Descendant[]) => {
-    setValue(val);
+  const onChangeEditorValue = (value: Descendant[]) => {
+    setValue(value);
   };
 
   return (
