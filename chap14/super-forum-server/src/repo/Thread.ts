@@ -34,5 +34,5 @@ export class Thread {
     nullable: true,
   })
   @Length(10, 2500)
-  body: varchar; 
+  body: string; 
 }
