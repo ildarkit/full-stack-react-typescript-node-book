@@ -1,0 +1,12 @@
+services:
+  session:
+    build: .
+    ports:
+      - "6379:6379"
+    networks:
+      - superforum-backend
+
+networks:
+  superforum-backend:
+    driver: bridge
+
