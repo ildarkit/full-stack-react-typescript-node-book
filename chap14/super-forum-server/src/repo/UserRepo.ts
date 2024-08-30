@@ -12,10 +12,6 @@ export class UserResult {
   ) {}
 }
 
-function userNotFound(userName: string) {
-  return `User with userName ${userName} not found.`;
-}
-
 export const register = async (
   email: string,
   userName: string,
