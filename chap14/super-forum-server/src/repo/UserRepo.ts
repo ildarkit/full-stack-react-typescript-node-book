@@ -33,7 +33,7 @@ export const register = async (
       messages: [emailErrorMsg]
     };
 
-  const salt = await bcrypt.getSalt(saltRounds);
+  const salt = await bcrypt.genSalt(saltRounds);
   const hashedPassword = await bcrypt.hash(password, salt);
   const userEntity = await User.create({
     email: trimmedEmail,

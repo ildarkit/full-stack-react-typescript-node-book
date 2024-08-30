@@ -4,14 +4,15 @@ import connectRedis from 'connect-redis';
 import Redis from 'ioredis';
 import dotenv from 'dotenv';
 import {createConnection} from 'typeorm';
+import {register} from './repo/UserRepo';
+import bodyParser from 'body-parser';
 
 dotenv.config();
 console.log(process.env.NODE_ENV);
 
 declare module "express-session" {
   interface SessionData {
-    userid: string;
-    loadedCount: number
+    test: string;
   }
 }
 
@@ -34,6 +35,8 @@ const main = async () => {
     prefix: "superforum:",
   });
 
+  app.use(bodyParser.json())
+
   app.use(
     session({
       store,
@@ -50,20 +53,31 @@ const main = async () => {
       },
     } as any)
   );
+  
   app.use(router);
-  router.get("/", (req, res, next) => {
-    const session = req.session;
-    if (!session.userid) {
-      session.userid = JSON.stringify(req.query.userid);
-      console.log("Userid is set");
-      session.loadedCount = 0;
-    } else {
-      session.loadedCount = (session.loadedCount || 0) + 1;
-    }
 
-    res.send(
-      `userid: ${req.session!.userid}, loadedCount: ${req.session!.loadedCount}`
-    );
+  router.get("/", (req, res, next) => {
+    req.session!.test = "hello";
+    res.send("hello");
+  });
+
+  router.post("/register", async (req, res, next) => {
+    try {
+      console.log("params", req.body);
+      const userResult = await register(
+        req.body.email,
+        req.body.userName,
+        req.body.password
+      );
+      if (userResult && userResult.user) {
+        res.send(`new user created, userId: ${userResult.user.id}`);
+      } else if (userResult && userResult.messages) {
+        res.send(userResult.messages[0]);
+      } else
+        next();
+    } catch (ex) {
+      res.send(ex.message);
+    }
   });
 
   app.listen({port: process.env.SERVER_PORT}, () => {
