@@ -6,14 +6,14 @@ import dotenv from 'dotenv';
 import {createConnection} from 'typeorm';
 import bodyParser from 'body-parser';
 import {register, login, logout} from './repo/UserRepo';
+import {createThread} from './repo/ThreadRepo';
 
 dotenv.config();
-console.log(process.env.NODE_ENV);
 
 declare module "express-session" {
   interface SessionData {
     test: string;
-    userID: string,
+    userID: string | undefined,
   }
 }
 
@@ -106,11 +106,28 @@ const main = async () => {
       console.log("params", req.body);
       const msg = await logout(req.body.userName);
       if (msg) {
-        req.session!.userId = null;
+        req.session!.userID = undefined;
         res.send(msg);
       } else {
         next();
       }
+    } catch (ex) {
+      console.log(ex);
+      res.send(ex.message);
+    }
+  });
+
+  router.post("/createthread", async (req, res, next) => {
+    try {
+      console.log("userId", req.session!.userID);
+      console.log("body", req.body);
+      const msg = await createThread(
+        req.session!.userID,
+        req.body.categoryId,
+        req.body.title,
+        req.body.body,
+      );
+      res.send(msg);
     } catch (ex) {
       console.log(ex);
       res.send(ex.message);
