@@ -4,8 +4,8 @@ import connectRedis from 'connect-redis';
 import Redis from 'ioredis';
 import dotenv from 'dotenv';
 import {createConnection} from 'typeorm';
-import {register} from './repo/UserRepo';
 import bodyParser from 'body-parser';
+import {register, login} from './repo/UserRepo';
 
 dotenv.config();
 console.log(process.env.NODE_ENV);
@@ -13,6 +13,7 @@ console.log(process.env.NODE_ENV);
 declare module "express-session" {
   interface SessionData {
     test: string;
+    userID: string,
   }
 }
 
@@ -75,6 +76,26 @@ const main = async () => {
         res.send(userResult.messages[0]);
       } else
         next();
+    } catch (ex) {
+      res.send(ex.message);
+    }
+  });
+
+  router.post("/login", async (req, res, next) => {
+    try {
+      console.log("params", req.body);
+      const userResult = await login(
+        req.body.username,
+        req.body.password,
+      );
+      if (userResult && userResult.user) {
+        req.session!.userID = userResult.user!.id;
+        res.send(`user logged in, userID: ${req.session!.userID}`);
+      } else if (userResult && userResult.messages) {
+        res.send(userResult.messages[0]);
+      } else {
+        next();
+      }
     } catch (ex) {
       res.send(ex.message);
     }

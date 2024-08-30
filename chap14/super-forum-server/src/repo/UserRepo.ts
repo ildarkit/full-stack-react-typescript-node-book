@@ -12,6 +12,10 @@ export class UserResult {
   ) {}
 }
 
+function userNotFound(userName: string) {
+  return `User with userName ${userName} not found.`;
+}
+
 export const register = async (
   email: string,
   userName: string,
@@ -43,4 +47,31 @@ export const register = async (
 
   userEntity.password = "";
   return {user: userEntity};
+};
+
+export const login = async (
+  userName: string,
+  password: string,
+): Promise<UserResult> => {
+  const user = await User.findOne({
+    where: {userName},
+  });
+
+  if (!user) 
+    return {
+      messages: [userNotFound(userName)],
+    };
+  if (!user.confirmed)
+    return {
+      messages: ["User has not confirmed their registration email yet."],
+    };
+  
+  const passwordMatch = await bcrypt.compare(password, user?.password);
+  if (!passwordMatch)
+    return {
+      messages: ["Password is invalid"],
+    };
+  return {
+    user,
+  };
 };
