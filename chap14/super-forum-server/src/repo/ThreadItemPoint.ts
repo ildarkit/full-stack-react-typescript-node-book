@@ -6,9 +6,10 @@ import {
 } from 'typeorm';
 import {User} from './User';
 import {ThreadItem} from './ThreadItem';
+import {Auditable} from './Auditable';
 
 @Entity({name: "ThreadItemPoints"})
-export class ThreadItemPoint {
+export class ThreadItemPoint extends Auditable {
   @PrimaryGeneratedColumn({name: "Id", type: "bigint"})
   id: string;
 
