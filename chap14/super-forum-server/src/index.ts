@@ -5,7 +5,7 @@ import Redis from 'ioredis';
 import dotenv from 'dotenv';
 import {createConnection} from 'typeorm';
 import bodyParser from 'body-parser';
-import {register, login} from './repo/UserRepo';
+import {register, login, logout} from './repo/UserRepo';
 
 dotenv.config();
 console.log(process.env.NODE_ENV);
@@ -97,6 +97,22 @@ const main = async () => {
         next();
       }
     } catch (ex) {
+      res.send(ex.message);
+    }
+  });
+
+  router.post("/logout", async (req, res, next) => {
+    try {
+      console.log("params", req.body);
+      const msg = await logout(req.body.userName);
+      if (msg) {
+        req.session!.userId = null;
+        res.send(msg);
+      } else {
+        next();
+      }
+    } catch (ex) {
+      console.log(ex);
       res.send(ex.message);
     }
   });
