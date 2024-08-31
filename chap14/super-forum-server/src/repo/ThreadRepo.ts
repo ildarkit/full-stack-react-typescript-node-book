@@ -5,7 +5,7 @@ import {
 import {Thread} from './Thread';
 import {ThreadCategory} from './ThreadCategory';
 import {User} from './User';
-import {QueryArrayResult} from './QueryArrayResult';
+import {QueryArrayResult, QueryOneResult} from './QueryArrayResult';
 
 export const createThread = async (
   userId: string | undefined,
@@ -55,5 +55,38 @@ export const createThread = async (
 
   return {
     messages: ["Thread created successfully."],
+  };
+};
+
+export const getThreadById = async (
+  id: string
+): Promise<QueryOneResult<Thread>> => {
+  const thread = await Thread.findOne({
+    where: {id}
+  });
+  if (!thread)
+    return {
+      messages: ["Thread not found."],
+    };
+  return {
+    entity: thread,
+  };
+};
+
+export const getThreadsByCategoryId = async (
+  categoryId: string
+): Promise<QueryArrayResult<Thread>> => {
+  const threads = await Thread.createQueryBuilder("thread")
+    .where(`thread."categoryId" = :categoryId`, {categoryId})
+    .leftJoinAndSelect("thread.category", "category")
+    .orderBy("thread.createdOn", "DESC")
+    .getMany();
+  if (!threads)
+    return {
+      messages: ["Threads of category not found."],
+    };
+  console.log(threads);
+  return {
+    entities: threads,
   };
 };

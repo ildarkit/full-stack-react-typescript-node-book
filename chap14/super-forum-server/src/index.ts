@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import {createConnection} from 'typeorm';
 import bodyParser from 'body-parser';
 import {register, login, logout} from './repo/UserRepo';
-import {createThread} from './repo/ThreadRepo';
+import {createThread, getThreadsByCategoryId, getThreadById} from './repo/ThreadRepo';
 
 dotenv.config();
 
@@ -128,6 +128,38 @@ const main = async () => {
         req.body.body,
       );
       res.send(msg);
+    } catch (ex) {
+      console.log(ex);
+      res.send(ex.message);
+    }
+  });
+
+  router.post("/threadsbycategory", async (req, res, next) => {
+    try {
+      const threadResult = await getThreadsByCategoryId(req.body.categoryId);
+      if (threadResult && threadResult.entities) {
+        let items = "";
+        threadResult.entities.forEach((th) => {
+          items += th.title + ", ";
+        });
+        res.send(items);
+      } else if (threadResult && threadResult.messages) {
+        res.send(threadResult.messages[0]);
+      }
+    } catch (ex) {
+      console.log(ex);
+      res.send(ex.message);
+    }
+  });
+
+  router.post("/thread", async (req, res, next) => {
+    try {
+      const threadResult = await getThreadById(req.body.threadId);
+      if (threadResult && threadResult.entity) { 
+        res.send(threadResult.entity.title);
+      } else if (threadResult && threadResult.messages) {
+        res.send(threadResult.messages[0]);
+      }
     } catch (ex) {
       console.log(ex);
       res.send(ex.message);
