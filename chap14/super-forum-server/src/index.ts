@@ -7,13 +7,14 @@ import {createConnection} from 'typeorm';
 import bodyParser from 'body-parser';
 import {register, login, logout} from './repo/UserRepo';
 import {createThread, getThreadsByCategoryId, getThreadById} from './repo/ThreadRepo';
+import {createThreadItem, getThreadItemsByThreadId} from './repo/ThreadItemRepo';
 
 dotenv.config();
 
 declare module "express-session" {
   interface SessionData {
     test: string;
-    userID: string | undefined,
+    userID: string | undefined | null,
   }
 }
 
@@ -106,7 +107,7 @@ const main = async () => {
       console.log("params", req.body);
       const msg = await logout(req.body.userName);
       if (msg) {
-        req.session!.userID = undefined;
+        req.session!.userID = null;
         res.send(msg);
       } else {
         next();
@@ -160,6 +161,39 @@ const main = async () => {
       } else if (threadResult && threadResult.messages) {
         res.send(threadResult.messages[0]);
       }
+    } catch (ex) {
+      console.log(ex);
+      res.send(ex.message);
+    }
+  });
+  
+  router.post("/createthreaditem", async(req, res, next) => {
+    try {
+      const msg = await createThreadItem(
+        req.session!.userID,
+        req.body.threadId,
+        req.body.body
+      );
+      res.send(msg);
+    } catch (ex) {
+      console.log(ex);
+      res.send(ex.message);
+    }
+  });
+
+  router.post("/threaditemsbythread", async (req, res, next) => {
+    try {
+      const threadItemResult = await getThreadItemsByThreadId(
+        req.body.threadId
+      );
+      if (threadItemResult && threadItemResult.entities) {
+        let items = "";
+        threadItemResult.entities.forEach((ti) => {
+          items += ti.body + ", ";
+        });
+        res.send(items);
+      } else if (threadItemResult && threadItemResult.messages)
+        res.send(threadItemResult.messages[0]);
     } catch (ex) {
       console.log(ex);
       res.send(ex.message);

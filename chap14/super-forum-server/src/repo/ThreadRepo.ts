@@ -8,7 +8,7 @@ import {User} from './User';
 import {QueryArrayResult, QueryOneResult} from './QueryArrayResult';
 
 export const createThread = async (
-  userId: string | undefined,
+  userId: string | undefined | null,
   categoryId: string,
   title: string,
   body: string,
