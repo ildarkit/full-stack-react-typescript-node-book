@@ -5,6 +5,13 @@ import Redis from 'ioredis';
 import dotenv from 'dotenv';
 import {createConnection} from 'typeorm';
 import bodyParser from 'body-parser';
+import {ApolloServer} from '@apollo/server';
+import {expressMiddleware} from '@apollo/server/express4';
+import {ApolloServerPluginDrainHttpServer} from '@apollo/server/plugin/drainHttpServer';
+import http from 'http';
+import cors from 'cors';
+import typeDefs from './gql/typeDefs';
+import resolvers from './gql/resolvers';
 import {register, login, logout} from './repo/UserRepo';
 import {createThread, getThreadsByCategoryId, getThreadById} from './repo/ThreadRepo';
 import {createThreadItem, getThreadItemsByThreadId} from './repo/ThreadItemRepo';
@@ -20,6 +27,15 @@ declare module "express-session" {
 
 const main = async () => {
   const app = express();
+  const httpServer = http.createServer(app);
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+    plugins: [ApolloServerPluginDrainHttpServer({httpServer})],
+  });
+
+  await apolloServer.start();
+
   const router = express.Router();
 
   await createConnection();
@@ -37,9 +53,13 @@ const main = async () => {
     prefix: "superforum:",
   });
 
-  app.use(bodyParser.json())
-
   app.use(
+    '/graphql',
+    cors<cors.CorsRequest>(),
+    bodyParser.json(),
+    expressMiddleware(apolloServer, {
+      context: async ({req, res, pubsub}: any) => ({req, res, pubsub}),
+    }),
     session({
       store,
       name: process.env.COOKIE_NAME,
@@ -200,9 +220,10 @@ const main = async () => {
     }
   });
 
-  app.listen({port: process.env.SERVER_PORT}, () => {
-    console.log(`Server ready on port ${process.env.SERVER_PORT}`)
-  });
+  await new Promise<void>(
+    resolve => httpServer.listen({port: process.env.SERVER_PORT}, resolve)
+  );
+  console.log(`Server ready on port ${process.env.SERVER_PORT}`);
 };
 main();
 
