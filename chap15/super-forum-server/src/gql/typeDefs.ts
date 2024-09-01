@@ -63,6 +63,15 @@ const typeDefs = `#graphql
   type Query {
     getThreadById(id: ID!): ThreadResult
   }
+
+  type Mutation {
+    createThread(
+      userId: ID!
+      categoryId: ID!
+      title: String!
+      body: String!
+    ): EntityResult
+  }
 `;
 
 export default typeDefs;
