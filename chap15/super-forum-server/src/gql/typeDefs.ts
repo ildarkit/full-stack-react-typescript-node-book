@@ -38,9 +38,9 @@ const typeDefs = `#graphql
 
   type ThreadArray {
     threads: [Thread!]
-  }
+  } 
 
-  union ThreadArrayResult = ThreadArray | EntityResult
+  union ThreadArrayResult = ThreadArray | EntityResult 
 
   type ThreadItem {
     id: ID!
@@ -54,6 +54,14 @@ const typeDefs = `#graphql
     lastModifiedBy: String!
     lastModifiedOn: Date!
   }
+  
+  union ThreadItemResult = ThreadItem | EntityResult
+
+  type ThreadItemArray {
+    threadItems: [ThreadItem!]
+  }
+
+  union ThreadItemArrayResult = ThreadItemArray | EntityResult
 
   type ThreadCategory {
     id: ID!
@@ -69,6 +77,7 @@ const typeDefs = `#graphql
   type Query {
     getThreadById(id: ID!): ThreadResult
     getThreadsByCategoryId(categoryId: ID!): ThreadArrayResult!
+    getThreadItemsByThreadId(threadId: ID!): ThreadItemArrayResult!
   }
 
   type Mutation {
@@ -76,6 +85,12 @@ const typeDefs = `#graphql
       userId: ID!
       categoryId: ID!
       title: String!
+      body: String!
+    ): EntityResult
+
+    createThreadItem(
+      userId: ID!
+      threadId: ID!
       body: String!
     ): EntityResult
   }

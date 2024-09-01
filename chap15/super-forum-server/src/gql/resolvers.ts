@@ -1,7 +1,9 @@
 import {getThreadById, getThreadsByCategoryId, createThread} from '../repo/ThreadRepo';
+import {createThreadItem, getThreadItemsByThreadId} from '../repo/ThreadItemRepo';
 import {QueryOneResult, QueryArrayResult} from '../repo/QueryArrayResult';
 import {GqlContext} from './GqlContext';
 import {Thread} from '../repo/Thread';
+import {ThreadItem} from '../repo/ThreadItem';
 
 
 interface EntityResult {
@@ -22,6 +24,21 @@ const resolvers = {
       if (obj.messages)
         return "EntityResult";
       return "ThreadArray";
+    },
+  },
+  ThreadItemResult: {
+    __resolveType(obj: any, context: GqlContext, info: any) {
+      if (obj.messages) {
+        return "EntityResult";
+      }
+      return "ThreadItem";
+    },
+  },
+  ThreadItemArrayResult: {
+    __resolveType(obj: any, context: GqlContext, info: any) {
+      if (obj.messages)
+        return "EntityResult";
+      return "ThreadItemArray";
     },
   },
   Query: {
@@ -65,6 +82,29 @@ const resolvers = {
         throw ex;
       }
     },
+
+    getThreadItemsByThreadId: async (
+      obj: any,
+      args: {threadId: string},
+      ctx: GqlContext,
+      info: any
+    ): Promise<{threadItems: Array<ThreadItem>} | EntityResult> => {
+      let threadItems: QueryArrayResult<ThreadItem>;
+      try {
+        threadItems = await getThreadItemsByThreadId(args.threadId);
+        if (threadItems.entities)
+          return {
+            threadItems: threadItems.entities,
+          };
+        return {
+          messages: threadItems.messages
+            ? threadItems.messages
+            : ["An error has occured"],
+        };
+      } catch (ex) {
+        throw ex;
+      }
+    },
   },
   Mutation: {
     createThread: async (
@@ -84,6 +124,33 @@ const resolvers = {
           args.userId,
           args.categoryId,
           args.title,
+          args.body
+        );
+        return {
+          messages: result.messages
+            ? result.messages
+            : ["Ane error occured"],
+        };
+      } catch (ex) {
+        throw ex;
+      }
+    },
+
+    createThreadItem: async (
+      obj: any,
+      args: {
+        userId: string,
+        threadId: string,
+        body: string
+      },
+      ctx: GqlContext,
+      info: any
+    ): Promise<EntityResult> => {
+      let result: QueryOneResult<ThreadItem>;
+      try {
+        result = await createThreadItem(
+          args.userId,
+          args.threadId,
           args.body
         );
         return {
