@@ -36,6 +36,12 @@ const typeDefs = `#graphql
 
   union ThreadResult = Thread | EntityResult
 
+  type ThreadArray {
+    threads: [Thread!]
+  }
+
+  union ThreadArrayResult = ThreadArray | EntityResult
+
   type ThreadItem {
     id: ID!
     views: Int!
@@ -62,6 +68,7 @@ const typeDefs = `#graphql
 
   type Query {
     getThreadById(id: ID!): ThreadResult
+    getThreadsByCategoryId(categoryId: ID!): ThreadArrayResult!
   }
 
   type Mutation {
