@@ -4,7 +4,6 @@ import connectRedis from 'connect-redis';
 import Redis from 'ioredis';
 import dotenv from 'dotenv';
 import {createConnection} from 'typeorm';
-import bodyParser from 'body-parser';
 import {ApolloServer} from '@apollo/server';
 import {expressMiddleware} from '@apollo/server/express4';
 import {ApolloServerPluginDrainHttpServer} from '@apollo/server/plugin/drainHttpServer';
@@ -15,6 +14,7 @@ import resolvers from './gql/resolvers';
 import {register, login, logout} from './repo/UserRepo';
 import {createThread, getThreadsByCategoryId, getThreadById} from './repo/ThreadRepo';
 import {createThreadItem, getThreadItemsByThreadId} from './repo/ThreadItemRepo';
+import 'reflect-metadata';
 
 dotenv.config();
 
@@ -56,7 +56,8 @@ const main = async () => {
   app.use(
     '/graphql',
     cors<cors.CorsRequest>(),
-    bodyParser.json(),
+    express.json(),
+    express.urlencoded({extended: true}),
     expressMiddleware(apolloServer, {
       context: async ({req, res, pubsub}: any) => ({req, res, pubsub}),
     }),
