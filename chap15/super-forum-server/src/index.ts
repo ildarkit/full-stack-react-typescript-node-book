@@ -57,10 +57,7 @@ const main = async () => {
     '/graphql',
     cors<cors.CorsRequest>(),
     express.json(),
-    express.urlencoded({extended: true}),
-    expressMiddleware(apolloServer, {
-      context: async ({req, res, pubsub}: any) => ({req, res, pubsub}),
-    }),
+    express.urlencoded({extended: true}), 
     session({
       store,
       name: process.env.COOKIE_NAME,
@@ -74,7 +71,10 @@ const main = async () => {
         secure: false,
         maxAge: 1000 * 60 * 60 * 24,
       },
-    } as any)
+    } as any),
+    expressMiddleware(apolloServer, {
+      context: async ({req, res, pubsub}: any) => ({req, res, pubsub}),
+    }),
   );
   
   app.use(router);
