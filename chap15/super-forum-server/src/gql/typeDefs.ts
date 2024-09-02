@@ -93,6 +93,12 @@ const typeDefs = `#graphql
       threadId: ID!
       body: String!
     ): EntityResult
+
+    updateThreadPoint(
+      userId: ID!
+      threadID: ID!
+      increment: Boolean!
+    ): String!
   }
 `;
 

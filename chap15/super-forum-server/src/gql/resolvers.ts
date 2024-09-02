@@ -4,6 +4,8 @@ import {QueryOneResult, QueryArrayResult} from '../repo/QueryArrayResult';
 import {GqlContext} from './GqlContext';
 import {Thread} from '../repo/Thread';
 import {ThreadItem} from '../repo/ThreadItem';
+import {updateThreadPoint} from '../repo/ThreadPointRepo';
+// import {ThreadPoint} from '../repo/ThreadPoint';
 
 
 interface EntityResult {
@@ -156,8 +158,29 @@ const resolvers = {
         return {
           messages: result.messages
             ? result.messages
-            : ["Ane error occured"],
+            : ["An error occured"],
         };
+      } catch (ex) {
+        throw ex;
+      }
+    },
+
+    updateThreadPoint: async (
+      obj: any,
+      args: {
+        userId: string,
+        threadId: string,
+        increment: boolean
+      },
+    ): Promise<string> => {
+      let result;
+      try {
+        result = await updateThreadPoint(
+          args.userId,
+          args.threadId,
+          args.increment
+        );
+        return result;
       } catch (ex) {
         throw ex;
       }
