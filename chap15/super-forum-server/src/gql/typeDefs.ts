@@ -96,7 +96,13 @@ const typeDefs = `#graphql
 
     updateThreadPoint(
       userId: ID!
-      threadID: ID!
+      threadId: ID!
+      increment: Boolean!
+    ): String!
+
+    updateThreadItemPoint(
+      userId: ID!
+      threadItemId: ID!
       increment: Boolean!
     ): String!
   }

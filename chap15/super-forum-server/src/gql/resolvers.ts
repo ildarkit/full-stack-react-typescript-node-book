@@ -5,7 +5,7 @@ import {GqlContext} from './GqlContext';
 import {Thread} from '../repo/Thread';
 import {ThreadItem} from '../repo/ThreadItem';
 import {updateThreadPoint} from '../repo/ThreadPointRepo';
-// import {ThreadPoint} from '../repo/ThreadPoint';
+import {updateThreadItemPoint} from '../repo/ThreadItemPointRepo';
 
 
 interface EntityResult {
@@ -178,6 +178,27 @@ const resolvers = {
         result = await updateThreadPoint(
           args.userId,
           args.threadId,
+          args.increment
+        );
+        return result;
+      } catch (ex) {
+        throw ex;
+      }
+    },
+
+    updateThreadItemPoint: async (
+      obj: any,
+      args: {
+        userId: string,
+        threadItemId: string,
+        increment: boolean
+      },
+    ): Promise<string> => {
+      let result;
+      try {
+        result = await updateThreadItemPoint(
+          args.userId,
+          args.threadItemId,
           args.increment
         );
         return result;
