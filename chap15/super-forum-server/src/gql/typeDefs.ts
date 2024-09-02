@@ -19,6 +19,8 @@ const typeDefs = `#graphql
     lastModifiedOn: Date!
   }
 
+  union UserResult = User | EntityResult
+
   type Thread {
     id: ID!
     views: Int!
@@ -78,6 +80,7 @@ const typeDefs = `#graphql
     getThreadById(id: ID!): ThreadResult
     getThreadsByCategoryId(categoryId: ID!): ThreadArrayResult!
     getThreadItemsByThreadId(threadId: ID!): ThreadItemArrayResult!
+    me: UserResult!
   }
 
   type Mutation {
@@ -104,6 +107,21 @@ const typeDefs = `#graphql
       userId: ID!
       threadItemId: ID!
       increment: Boolean!
+    ): String!
+
+    register(
+      email: String!
+      userName: String!
+      password: String!
+    ): String! 
+
+    login(
+      userName: String!
+      password: String!
+    ): String!
+
+    logout(
+      userName: String!
     ): String!
   }
 `;

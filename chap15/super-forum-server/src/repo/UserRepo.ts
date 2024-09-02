@@ -84,6 +84,24 @@ export const logout = async (userName: string): Promise<string> => {
   return "User logged off.";
 };
 
+export const me = async (id: string): Promise<UserResult> => {
+  const user = await User.findOne({
+    where: {id},
+    relations: ["threads", "threads.threadItems"],
+  });
+  if (!user) 
+    return {
+      messages: ["User not found."],
+    };
+  if (!user.confirmed)
+    return {
+      messages: ["User has not confirmed their registration email yet."],
+    };
+  return {
+    user,
+  };
+};
+
 function userNotFound(userName: string) {
   return `User with userName ${userName} not found.`;
 }

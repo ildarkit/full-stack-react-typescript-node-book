@@ -6,13 +6,25 @@ import {Thread} from '../repo/Thread';
 import {ThreadItem} from '../repo/ThreadItem';
 import {updateThreadPoint} from '../repo/ThreadPointRepo';
 import {updateThreadItemPoint} from '../repo/ThreadItemPointRepo';
+import {User} from '../repo/User';
+import {register, login, logout, me, UserResult} from '../repo/UserRepo';
 
+
+const UNKNOWN_ERROR = "An error has occured";
 
 interface EntityResult {
   messages: Array<string>;
 }
 
 const resolvers = {
+  UserResult: {
+    __resolveType(obj: any, context: GqlContext, info: any) {
+      if (obj.messages) {
+        return "EntityResult";
+      }
+      return "User";
+    },
+  },
   ThreadResult: {
     __resolveType(obj: any, context: GqlContext, info: any) {
       if (obj.messages) {
@@ -78,7 +90,7 @@ const resolvers = {
         return {
           messages: threads.messages
             ? threads.messages
-            : ["An error has occured"],
+            : [UNKNOWN_ERROR],
         };
       } catch (ex) {
         throw ex;
@@ -101,7 +113,30 @@ const resolvers = {
         return {
           messages: threadItems.messages
             ? threadItems.messages
-            : ["An error has occured"],
+            : [UNKNOWN_ERROR],
+        };
+      } catch (ex) {
+        throw ex;
+      }
+    },
+
+    me: async (
+      obj: any,
+      args: null,
+      ctx: GqlContext,
+      info: any
+    ): Promise<User | EntityResult> => {
+      let user: UserResult;
+      try {
+        if (!ctx.req.session?.userID)
+          return {
+            messages: ["User not logged in."],
+          };
+        user = await me(ctx.req.session.userID);
+        if (user && user.user)
+          return user.user;
+        return {
+          messages: user.messages ? user.messages : [UNKNOWN_ERROR],
         };
       } catch (ex) {
         throw ex;
@@ -131,7 +166,7 @@ const resolvers = {
         return {
           messages: result.messages
             ? result.messages
-            : ["Ane error occured"],
+            : [UNKNOWN_ERROR],
         };
       } catch (ex) {
         throw ex;
@@ -158,7 +193,7 @@ const resolvers = {
         return {
           messages: result.messages
             ? result.messages
-            : ["An error occured"],
+            : [UNKNOWN_ERROR],
         };
       } catch (ex) {
         throw ex;
@@ -172,6 +207,8 @@ const resolvers = {
         threadId: string,
         increment: boolean
       },
+      ctx: GqlContext,
+      info: any
     ): Promise<string> => {
       let result;
       try {
@@ -193,6 +230,8 @@ const resolvers = {
         threadItemId: string,
         increment: boolean
       },
+      ctx: GqlContext,
+      info: any
     ): Promise<string> => {
       let result;
       try {
@@ -203,6 +242,75 @@ const resolvers = {
         );
         return result;
       } catch (ex) {
+        throw ex;
+      }
+    },
+
+    register: async (
+      obj: any,
+      args: {
+        email: string,
+        userName: string,
+        password: string
+      },
+      ctx: GqlContext,
+      info: any
+    ): Promise<string> => {
+      let user: UserResult;
+      let message = "Registration successfull.";
+      try {
+        user = await register(args.email, args.userName, args.password);
+        if (user && user.user)
+          return message;
+        return user && user.messages ? user.messages[0] : UNKNOWN_ERROR;
+      } catch (ex) {
+        throw ex;
+      }
+    },
+
+    login: async (
+      obj: any,
+      args: {
+        userName: string,
+        password: string
+      },
+      ctx: GqlContext,
+      info: any
+    ): Promise<string> => {
+      let user: UserResult;
+      try {
+        user = await login(args.userName, args.password);
+        if (user && user.user) {
+          ctx.req.session!.userID = user.user!.id;
+          return `Login successfull for userId ${ctx.req.session!.userID}`;
+        }
+        return user && user.messages ? user.messages[0] : UNKNOWN_ERROR;
+      } catch (ex) {
+        console.error(ex.message);
+        throw ex;
+      }
+    },
+
+    logout: async (
+      obj: any,
+      args: {
+        userName: string,
+      },
+      ctx: GqlContext,
+      info: any
+    ): Promise<string> => {
+      try {
+        const result = await logout(args.userName);
+        ctx.req.session?.destroy((err: any) => {
+          if (err) {
+            console.error("session logout failed");
+            return;
+          }
+          console.log("session destroyed");
+        }); 
+        return result;
+      } catch (ex) {
+        console.error(ex.message);
         throw ex;
       }
     },
