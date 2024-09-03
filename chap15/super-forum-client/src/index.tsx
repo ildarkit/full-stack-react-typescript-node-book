@@ -7,13 +7,23 @@ import {Provider} from 'react-redux';
 import configureStore from './store/configureStore';
 import ErrorBoundary from './components/ErrorBoundary';
 import ReactModal from 'react-modal';
+import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: 'http://localhost:8000/graphql',
+  credentials: 'include',
+  cache: new InMemoryCache(),
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <Provider store={configureStore()}>
-    <ErrorBoundary>{[<App key='App'/>]}</ErrorBoundary>
+    <ApolloProvider client={client}>
+      <ErrorBoundary>{[<App key='App'/>]}</ErrorBoundary>
+    </ApolloProvider>
   </Provider>
 );
 
