@@ -55,7 +55,10 @@ const main = async () => {
 
   app.use(
     '/graphql',
-    cors<cors.CorsRequest>(),
+    cors<cors.CorsRequest>({
+      credentials: true,
+      origin: process.env.CLIENT_URL,
+    }),
     express.json(),
     express.urlencoded({extended: true}), 
     session({

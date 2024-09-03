@@ -4,10 +4,12 @@ import {QueryOneResult, QueryArrayResult} from '../repo/QueryArrayResult';
 import {GqlContext} from './GqlContext';
 import {Thread} from '../repo/Thread';
 import {ThreadItem} from '../repo/ThreadItem';
+import {ThreadCategory} from '../repo/ThreadCategory';
 import {updateThreadPoint} from '../repo/ThreadPointRepo';
 import {updateThreadItemPoint} from '../repo/ThreadItemPointRepo';
 import {User} from '../repo/User';
 import {register, login, logout, me, UserResult} from '../repo/UserRepo';
+import {getAllCategories} from '../repo/ThreadCategoryRepo';
 
 
 const UNKNOWN_ERROR = "An error has occured";
@@ -137,6 +139,25 @@ const resolvers = {
           return user.user;
         return {
           messages: user.messages ? user.messages : [UNKNOWN_ERROR],
+        };
+      } catch (ex) {
+        throw ex;
+      }
+    },
+
+    getAllCategories: async (
+      obj: any,
+      args: null,
+      ctx: GqlContext,
+      info: any
+    ): Promise<Array<ThreadCategory> | EntityResult> => {
+      let cats: QueryArrayResult<ThreadCategory>;
+      try {
+        cats = await getAllCategories();
+        if (cats.entities)
+          return cats.entities;
+        return {
+          messages: cats.messages ? cats.messages : [UNKNOWN_ERROR],
         };
       } catch (ex) {
         throw ex;

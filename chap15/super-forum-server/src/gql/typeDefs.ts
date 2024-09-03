@@ -81,6 +81,7 @@ const typeDefs = `#graphql
     getThreadsByCategoryId(categoryId: ID!): ThreadArrayResult!
     getThreadItemsByThreadId(threadId: ID!): ThreadItemArrayResult!
     me: UserResult!
+    getAllCategories: [ThreadCategory!]
   }
 
   type Mutation {
