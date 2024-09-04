@@ -24,6 +24,7 @@ const typeDefs = `#graphql
   type Thread {
     id: ID!
     views: Int!
+    points: Int!
     isDisabled: Boolean!
     title: String!
     body: String!
@@ -47,6 +48,7 @@ const typeDefs = `#graphql
   type ThreadItem {
     id: ID!
     views: Int!
+    points: Int!
     isDisabled: Boolean!
     body: String!
     user: User!
@@ -82,6 +84,7 @@ const typeDefs = `#graphql
     getThreadItemsByThreadId(threadId: ID!): ThreadItemArrayResult!
     me: UserResult!
     getAllCategories: [ThreadCategory!]
+    getThreadsLatest: ThreadArrayResult!
   }
 
   type Mutation {

@@ -1,4 +1,9 @@
-import {getThreadById, getThreadsByCategoryId, createThread} from '../repo/ThreadRepo';
+import {
+  getThreadById,
+  getThreadsByCategoryId,
+  createThread,
+  getThreadsLatest
+} from '../repo/ThreadRepo';
 import {createThreadItem, getThreadItemsByThreadId} from '../repo/ThreadItemRepo';
 import {QueryOneResult, QueryArrayResult} from '../repo/QueryArrayResult';
 import {GqlContext} from './GqlContext';
@@ -76,6 +81,7 @@ const resolvers = {
         throw ex;
       }
     },
+
     getThreadsByCategoryId: async (
       obj: any,
       args: {categoryId: string},
@@ -158,6 +164,29 @@ const resolvers = {
           return cats.entities;
         return {
           messages: cats.messages ? cats.messages : [UNKNOWN_ERROR],
+        };
+      } catch (ex) {
+        throw ex;
+      }
+    },
+
+    getThreadsLatest: async (
+      obj: any,
+      args: null,
+      ctx: GqlContext,
+      info: any
+    ): Promise<{threads: Array<Thread>} | EntityResult> => {
+      let threads: QueryArrayResult<Thread>;
+      try {
+        threads = await getThreadsLatest();
+        if (threads.entities)
+          return {
+            threads: threads.entities,
+          };
+        return {
+          messages: threads.messages
+            ? threads.messages
+            : [UNKNOWN_ERROR],
         };
       } catch (ex) {
         throw ex;
