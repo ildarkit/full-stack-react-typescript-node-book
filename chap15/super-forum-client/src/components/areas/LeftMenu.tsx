@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import {useWindowDimensions} from "../../hooks/useWindowDimensions";
 import {gql, useQuery} from '@apollo/client';
+import {useWindowDimensions} from "../../hooks/useWindowDimensions";
 
 const GetAllCategories = gql`
   query getAllCategories {
