@@ -8,6 +8,7 @@ import './App.css';
 import UserProfile from './components/routes/userProfile/UserProfile';
 import {UserProfileSetType} from './store/user/Reducer';
 import {ThreadCategoriesType} from './store/categories/Reducer';
+import useRefreshReduxMe from './hooks/useRefreshReduxMe';
 
 const GetAllCategories = gql`
   query getAllCategories {
@@ -19,24 +20,26 @@ const GetAllCategories = gql`
 `;
 
 function App() {
-  const {data} = useQuery(GetAllCategories);
+  const {data: categoriesData} = useQuery(GetAllCategories);
+  const {execMe, updateMe} = useRefreshReduxMe();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch({
-      type: UserProfileSetType,
-      payload: {
-        id: 1,
-        userName: "testUser",
-      },
-    });
-    if (data && data.getAllCategories) {
+    execMe();
+  }, [execMe]);
+
+  useEffect(() => {
+    updateMe();
+  }, [updateMe]);
+
+  useEffect(() => { 
+    if (categoriesData && categoriesData.getAllCategories) {
       dispatch({
         type: ThreadCategoriesType,
-        payload: data.getAllCategories,
+        payload: categoriesData.getAllCategories,
       });
     }
-  }, [dispatch, data]);
+  }, [dispatch, categoriesData]);
 
   return (
     <BrowserRouter>
