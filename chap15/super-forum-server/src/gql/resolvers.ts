@@ -13,9 +13,15 @@ import {ThreadCategory} from '../repo/ThreadCategory';
 import {updateThreadPoint} from '../repo/ThreadPointRepo';
 import {updateThreadItemPoint} from '../repo/ThreadItemPointRepo';
 import {User} from '../repo/User';
-import {register, login, logout, me, UserResult} from '../repo/UserRepo';
+import {
+  register,
+  login,
+  logout,
+  me,
+  changePassword,
+  UserResult
+} from '../repo/UserRepo';
 import {getAllCategories} from '../repo/ThreadCategoryRepo';
-
 
 const UNKNOWN_ERROR = "An error has occured";
 
@@ -358,6 +364,28 @@ const resolvers = {
           }
           console.log("session destroyed");
         }); 
+        return result;
+      } catch (ex) {
+        console.error(ex.message);
+        throw ex;
+      }
+    },
+
+    changePassword: async (
+      obj: any,
+      args: {
+        newPassword: string,
+      },
+      ctx: GqlContext,
+      info: any
+    ): Promise<string> => {
+      try {
+        if (!ctx.req.session || !ctx.req.session.userID)
+          return "You must logged in befor you can change your password.";
+        const result = await changePassword(
+          ctx.req.session.userID,
+          args.newPassword
+        ); 
         return result;
       } catch (ex) {
         console.error(ex.message);

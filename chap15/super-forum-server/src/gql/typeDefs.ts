@@ -128,6 +128,10 @@ const typeDefs = `#graphql
     logout(
       userName: String!
     ): String!
+
+    changePassword(
+      newPassword: String!
+    ): String!
   }
 `;
 
