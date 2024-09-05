@@ -34,29 +34,36 @@ const SideBarMenus = () => {
 
   return (
     <ul>
-      <li>
-        <FontAwesomeIcon icon={faUser} />
-        <span className="menu-name">
-          <Link to={`/userprofile/${user?.id}`}>{user?.userName}</Link>
-        </span>
-      </li>
-      <li>
-        <FontAwesomeIcon icon={faRegistered} />
-        <span className="menu-name" onClick={onClickToggleRegister}>
-          register
-        </span>
-        <Registration 
-          isOpen={showRegister}
-          onClickToggle={onClickToggleRegister}
-        />
-      </li>
-      <li>
-          <FontAwesomeIcon icon={faSignInAlt} />
-          <span onClick={onClickToggleLogin} className="menu-name">
-            login
+      {user ? (
+        <li>
+          <FontAwesomeIcon icon={faUser} />
+          <span className="menu-name">
+            <Link to={`/userprofile/${user?.id}`}>{user?.userName}</Link>
           </span>
-          <Login isOpen={showLogin} onClickToggle={onClickToggleLogin} />
         </li>
+      ) : null}
+      {user ? null : (
+        <>
+          <li>
+            <FontAwesomeIcon icon={faRegistered} />
+            <span className="menu-name" onClick={onClickToggleRegister}>
+              register
+            </span>
+            <Registration 
+              isOpen={showRegister}
+              onClickToggle={onClickToggleRegister}
+            />
+          </li>
+          <li>
+            <FontAwesomeIcon icon={faSignInAlt} />
+            <span onClick={onClickToggleLogin} className="menu-name">
+              login
+            </span>
+            <Login isOpen={showLogin} onClickToggle={onClickToggleLogin} />
+          </li>
+        </>
+      )} 
+      {user ? (
         <li>
           <FontAwesomeIcon icon={faSignOutAlt} />
           <span onClick={onClickToggleLogout} className="menu-name">
@@ -64,6 +71,7 @@ const SideBarMenus = () => {
           </span>
           <Logout isOpen={showLogout} onClickToggle={onClickToggleLogout} />
         </li>
+      ) : null}
     </ul>
   );
 };
