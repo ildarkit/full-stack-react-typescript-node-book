@@ -41,11 +41,12 @@ function initValue(val: string | undefined): Descendant[] {
   return val ? [{...INITIAL_VALUE, children: [{text: val}]}] : [INITIAL_VALUE];
 } 
 
-interface RichEditorProps {
+class RichEditorProps {
   existingBody?: string;
+  readOnly?: boolean = false;
 }
 
-const RichEditor: FC<RichEditorProps> = ({ existingBody }) => {
+const RichEditor: FC<RichEditorProps> = ({ existingBody, readOnly }) => {
   const [value, setValue] = useState<Descendant[]>(() => initValue(existingBody));
   const renderElement = useCallback((props: any) => <Element {...props} />, []);
   const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
@@ -87,6 +88,7 @@ const RichEditor: FC<RichEditorProps> = ({ existingBody }) => {
             }
           }
         }}
+        readOnly={readOnly}
       />
     </Slate>
   );

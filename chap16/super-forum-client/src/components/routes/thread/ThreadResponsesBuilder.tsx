@@ -4,10 +4,12 @@ import ThreadResponse from "./ThreadResponse";
 
 interface ThreadResponsesBuilderProps {
   threadItems?: Array<ThreadItem>;
+  readOnly?: boolean;
 }
 
 const ThreadResponsesBuilder: FC<ThreadResponsesBuilderProps> = ({
   threadItems,
+  readOnly,
 }) => {
   const [responseElements, setResponseElements] = useState<
     JSX.Element | undefined
@@ -20,16 +22,17 @@ const ThreadResponsesBuilder: FC<ThreadResponsesBuilderProps> = ({
           <li key={`thr-${ti.id}`}>
             <ThreadResponse
               body={ti.body}
-              userName={ti.userName}
+              userName={ti.user.userName}
               lastModifiedOn={ti.createdOn}
               points={ti.points}
+              readOnly={readOnly}
             />
           </li>
         );
       });
       setResponseElements(<ul>{thResponses}</ul>);
     }
-  }, [threadItems]);
+  }, [threadItems, readOnly]);
 
   return (
     <div className="thread-body-container">

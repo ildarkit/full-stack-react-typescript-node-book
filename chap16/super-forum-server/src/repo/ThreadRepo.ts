@@ -62,7 +62,8 @@ export const getThreadById = async (
   id: string
 ): Promise<QueryOneResult<Thread>> => {
   const thread = await Thread.findOne({
-    where: {id}
+    where: {id},
+    relations: ["user", "threadItems", "threadItems.user", "category"],
   });
   if (!thread)
     return {
