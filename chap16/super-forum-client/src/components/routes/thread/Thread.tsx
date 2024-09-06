@@ -6,7 +6,6 @@ import ThreadHeader from "./ThreadHeader";
 import ThreadCategory from "./ThreadCategory";
 import ThreadTitle from "./ThreadTitle";
 import ThreadModel from "../../../models/Thread";
-import { getThreadById } from "../../../services/DataService";
 import Nav from "../../areas/Nav";
 import ThreadBody from './ThreadBody';
 import ThreadResponsesBuilder from "./ThreadResponsesBuilder";
@@ -22,6 +21,7 @@ const GetThreadById = gql`
       ... on Thread {
         id
         user {
+          id
           userName
         }
         lastModifiedOn
@@ -37,6 +37,7 @@ const GetThreadById = gql`
           body
           points
           user {
+            id
             userName
           }
         }
@@ -46,14 +47,26 @@ const GetThreadById = gql`
 `;
 
 const Thread = () => {
-  const [execGetThreadById, {data: threadData}] = useLazyQuery(GetThreadById); 
+  const [
+    execGetThreadById,
+    {data: threadData}
+  ] = useLazyQuery(GetThreadById, {fetchPolicy: "no-cache"}); 
   const [thread, setThread] = useState<ThreadModel | undefined>();
   const { id } = useParams();
   const [readOnly, setReadOnly] = useState(false);
 
+  const refreshThread = () => {
+    if (id && Number(id) > 0) {
+      execGetThreadById({
+        variables: {
+          id,
+        },
+      });
+    }
+  };
+
   useEffect(() => {
-    const parsed = id ? Number.parseInt(id) : undefined;
-    if (parsed && !Number.isNaN(parsed) && parsed > 0) {
+    if (id && Number(id) > 0) {
       execGetThreadById({
         variables: {
           id,
@@ -63,9 +76,14 @@ const Thread = () => {
   }, [id, execGetThreadById]);
 
   useEffect(() => {
-    if (threadData && threadData.getThreadById)
+    if (threadData && threadData.getThreadById) {
       setThread(threadData.getThreadById);
-    else setThread(undefined);
+      setReadOnly(true);
+    }
+    else {
+      setThread(undefined);
+      setReadOnly(false);
+    }
   }, [threadData]);
 
   return (
@@ -93,6 +111,10 @@ const Thread = () => {
             responseCount={
               thread && thread.threadItems && thread.threadItems.length
             }
+            userId={thread?.user.id || "0"}
+            threadId={thread?.id || "0"}
+            allowUpdatePoints={true}
+            refreshThread={refreshThread}
           />
         </div>
       </div>
