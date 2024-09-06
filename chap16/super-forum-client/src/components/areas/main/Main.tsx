@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import {gql, useLazyQuery} from '@apollo/client';
 import ThreadCard from './ThreadCard';
 import MainHeader from './MainHeader';
@@ -80,11 +80,10 @@ const Main = () => {
   ] = useLazyQuery(GetThreadsLatest);
   const {categoryId} = useParams();
   const [category, setCategory] = useState<Category | undefined>();
-  const [threadCards, setThreadCards] = useState<Array<JSX.Element | null>>();
+  const [threadCards, setThreadCards] = useState<Array<JSX.Element> | null>();
+  const navigate = useNavigate();
   
   useEffect(() => {
-    console.log("main categoryId", categoryId);
-
     if (categoryId && Number(categoryId) > 0) {
       execGetThreadsByCat({
         variables: {
@@ -107,6 +106,9 @@ const Main = () => {
       });
       setCategory(threads[0].category);
       setThreadCards(cards);
+    } else {
+      setCategory(undefined);
+      setThreadCards(null);
     }
   }, [threadsByCatData])
 
@@ -125,8 +127,18 @@ const Main = () => {
     }
   }, [threadsLatestData]);
 
+  const onClickPostThread = () => {
+    navigate("/thread");
+  };
+
   return (
     <main className="content">
+      <button
+        className="action-btn"
+        onClick={onClickPostThread}
+      >
+        Post
+      </button>
       <MainHeader category={category}/>
       <div>{threadCards}</div>
     </main>

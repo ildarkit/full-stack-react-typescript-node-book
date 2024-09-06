@@ -6,7 +6,6 @@ import Home from './components/routes/Home';
 import Thread from './components/routes/thread/Thread';
 import './App.css';
 import UserProfile from './components/routes/userProfile/UserProfile';
-import {UserProfileSetType} from './store/user/Reducer';
 import {ThreadCategoriesType} from './store/categories/Reducer';
 import useRefreshReduxMe from './hooks/useRefreshReduxMe';
 
@@ -46,7 +45,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/categorythreads/:categoryId" element={<Home/>}/>
-        <Route path="/thread/:id" element={<Thread/>}/>
+        <Route path="/thread/:id?" element={<Thread/>}/>
         <Route path="/userprofile/:id" element={<UserProfile/>}/>
       </Routes>
     </BrowserRouter>

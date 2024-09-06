@@ -5,6 +5,7 @@ import {
   Transforms,
   createEditor,
   Descendant,
+  Node,
   Element as SlateElement
 } from "slate";
 import isHotkey from "is-hotkey";
@@ -23,6 +24,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./RichEditor.css";
 
+export const getTextFromNodes = (nodes: Node[]) => {
+  return nodes.map((n: Node) => Node.string(n)).join("\n");
+}; 
+
 const HOTKEYS: { [keyName: string]: string } = {
   "mod+b": "bold",
   "mod+i": "italic",
@@ -34,7 +39,7 @@ const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
 const INITIAL_VALUE: Descendant = {
   type: "paragraph",
-  children: [{text: "Enter your post here."}],
+  children: [{text: ""}],
 };
 
 function initValue(val: string | undefined): Descendant[] {
@@ -44,9 +49,14 @@ function initValue(val: string | undefined): Descendant[] {
 class RichEditorProps {
   existingBody?: string;
   readOnly?: boolean = false;
+  sendOutBody?: (body: Descendant[]) => void;
 }
 
-const RichEditor: FC<RichEditorProps> = ({ existingBody, readOnly }) => {
+const RichEditor: FC<RichEditorProps> = ({ 
+  existingBody,
+  readOnly,
+  sendOutBody,
+}) => {
   const [value, setValue] = useState<Descendant[]>(() => initValue(existingBody));
   const renderElement = useCallback((props: any) => <Element {...props} />, []);
   const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
@@ -58,6 +68,7 @@ const RichEditor: FC<RichEditorProps> = ({ existingBody, readOnly }) => {
 
   const onChangeEditorValue = (value: Descendant[]) => {
     setValue(value);
+    sendOutBody && sendOutBody(value);
   };
 
   return (
@@ -76,7 +87,7 @@ const RichEditor: FC<RichEditorProps> = ({ existingBody, readOnly }) => {
         className="editor"
         renderElement={renderElement}
         renderLeaf={renderLeaf}
-        placeholder="Enter some rich text…"
+        placeholder="Enter your post here."
         spellCheck
         autoFocus
         onKeyDown={(event) => {
