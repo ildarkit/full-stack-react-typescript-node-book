@@ -111,7 +111,6 @@ const Thread = () => {
             responseCount={
               thread && thread.threadItems && thread.threadItems.length
             }
-            userId={thread?.user.id || "0"}
             threadId={thread?.id || "0"}
             allowUpdatePoints={true}
             refreshThread={refreshThread}

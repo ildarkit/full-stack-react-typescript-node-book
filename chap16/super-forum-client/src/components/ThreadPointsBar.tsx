@@ -11,12 +11,10 @@ import { gql, useMutation } from "@apollo/client";
 
 const UpdateThreadPoint = gql`
   mutation UpdateThreadPoint(
-    $userId: ID!
     $threadId: ID!
     $increment: Boolean!
   ) {
     updateThreadPoint(
-      userId: $userId
       threadId: $threadId
       increment: $increment
     )
@@ -26,7 +24,6 @@ const UpdateThreadPoint = gql`
 export class ThreadPointsBarProps {
   points: number = 0;
   responseCount?: number;
-  userId?: string;
   threadId?: string;
   allowUpdatePoints?: boolean = false;
   refreshThread?: () => void;
@@ -35,7 +32,6 @@ export class ThreadPointsBarProps {
 const ThreadPointsBar: FC<ThreadPointsBarProps> = ({
   points,
   responseCount,
-  userId,
   threadId,
   allowUpdatePoints,
   refreshThread,
@@ -49,7 +45,6 @@ const ThreadPointsBar: FC<ThreadPointsBarProps> = ({
     e.preventDefault();
     await execUpdateThreadPoint({
       variables: {
-        userId,
         threadId,
         increment: true,
       },
@@ -63,7 +58,6 @@ const ThreadPointsBar: FC<ThreadPointsBarProps> = ({
     e.preventDefault();
     await execUpdateThreadPoint({
       variables: {
-        userId,
         threadId,
         increment: false,
       },
