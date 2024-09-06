@@ -8,9 +8,9 @@ export const updateThreadPoint = async (
   threadId: string,
   increment: boolean
 ): Promise<string> => {
+  if (!userId || userId === "0")
+    return "User is not authenticated.";
 
-  //todo: user authentication check
-  
   let message = "Failed to increment thread point";
   const thread = await Thread.findOne({
     where: {id: threadId},

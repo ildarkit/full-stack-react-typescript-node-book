@@ -259,17 +259,18 @@ const resolvers = {
     updateThreadPoint: async (
       obj: any,
       args: {
-        userId: string,
         threadId: string,
         increment: boolean
       },
       ctx: GqlContext,
       info: any
     ): Promise<string> => {
-      let result;
+      let result = "";
       try {
+        if (!ctx.req.session || !ctx.req.session?.userID)
+          return "You must be logged in to set likes.";
         result = await updateThreadPoint(
-          args.userId,
+          ctx.req.session!.userID,
           args.threadId,
           args.increment
         );
@@ -282,7 +283,6 @@ const resolvers = {
     updateThreadItemPoint: async (
       obj: any,
       args: {
-        userId: string,
         threadItemId: string,
         increment: boolean
       },
@@ -291,8 +291,10 @@ const resolvers = {
     ): Promise<string> => {
       let result;
       try {
+        if (!ctx.req.session || !ctx.req.session?.userID)
+          return "You must be logged in to set likes.";
         result = await updateThreadItemPoint(
-          args.userId,
+          ctx.req.session!.userID,
           args.threadItemId,
           args.increment
         );
