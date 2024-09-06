@@ -7,6 +7,7 @@ import {
   faChevronDown
 } from "@fortawesome/free-solid-svg-icons";
 import "./ThreadPointsInline.css";
+import useUpdateThreadPoint from "../hooks/useUpdateThreadPoint";
 
 const UpdateThreadItemPoint = gql`
   mutation UpdateThreadItemPoint(
@@ -36,6 +37,11 @@ const ThreadPointsInline: FC<ThreadPointsInlineProps> = ({
   refreshThread,
 }) => {
   const [execUpdateThreadItemPoint] = useMutation(UpdateThreadItemPoint);
+  const {onClickDecThreadPoint, onClickIncThreadPoint} = useUpdateThreadPoint(
+    refreshThread,
+    threadId,
+  );
+
   const onClickIncThreadItemPoint = async (
     e: React.MouseEvent<SVGSVGElement, MouseEvent>
   ) => {
@@ -71,7 +77,7 @@ const ThreadPointsInline: FC<ThreadPointsInlineProps> = ({
         <FontAwesomeIcon 
           icon={faChevronUp}
           className="point-icon"
-          onClick={onClickIncThreadItemPoint}
+          onClick={threadId ? onClickIncThreadPoint : onClickIncThreadItemPoint}
         />
       </div>
       {points}
@@ -82,7 +88,7 @@ const ThreadPointsInline: FC<ThreadPointsInlineProps> = ({
         <FontAwesomeIcon 
           icon={faChevronDown}
           className="point-icon"
-          onClick={onClickDecThreadItemPoint}
+          onClick={threadId ? onClickDecThreadPoint : onClickDecThreadItemPoint}
         />
       </div>
       <div className="threadpointsinline-item-btn">
