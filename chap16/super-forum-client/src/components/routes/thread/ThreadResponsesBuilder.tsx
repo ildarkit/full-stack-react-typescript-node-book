@@ -5,11 +5,13 @@ import ThreadResponse from "./ThreadResponse";
 interface ThreadResponsesBuilderProps {
   threadItems?: Array<ThreadItem>;
   readOnly?: boolean;
+  refreshThread?: () => void;
 }
 
 const ThreadResponsesBuilder: FC<ThreadResponsesBuilderProps> = ({
   threadItems,
   readOnly,
+  refreshThread,
 }) => {
   const [responseElements, setResponseElements] = useState<
     JSX.Element | undefined
@@ -27,6 +29,8 @@ const ThreadResponsesBuilder: FC<ThreadResponsesBuilderProps> = ({
               points={ti.points}
               readOnly={readOnly}
               threadItemId={ti?.id || "0"}
+              // threadId={ti.thread.id}
+              // refreshThread={refreshThread}
             />
           </li>
         );
