@@ -99,7 +99,7 @@ const Thread = () => {
   const [readOnly, setReadOnly] = useState(false);
   const user = useSelector((state: AppState) => state.user);
   const [
-    { userId, category, title, body, bodyNode },
+    { userId, category, title, bodyNode },
     threadReduceDispatch
   ] = useReducer(threadReducer, {
     userId: user ? user.id : "0",
@@ -110,17 +110,7 @@ const Thread = () => {
   });
   const [postMsg, setPostMsg] = useState("");
   const [execCreateThread] = useMutation(CreateThread);
-  const navigate = useNavigate();
-
-  const refreshThread = () => {
-    if (id && Number(id) > 0) {
-      execGetThreadById({
-        variables: {
-          id,
-        },
-      });
-    }
-  };
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     if (id && Number(id) > 0) {
@@ -150,21 +140,31 @@ const Thread = () => {
     }
   }, [threadData]);
 
-  const receiveSelectedCategory = (cat: Category) => {
+  function refreshThread() {
+    if (id && Number(id) > 0) {
+      execGetThreadById({
+        variables: {
+          id,
+        },
+      });
+    }
+  };
+
+  function receiveSelectedCategory(cat: Category) {
     threadReduceDispatch({
       type: "category",
       payload: cat,
     });
   };
 
-  const receiveTitle = (updatedTitle: string) => {
+  function receiveTitle(updatedTitle: string) {
     threadReduceDispatch({
       type: "title",
       payload: updatedTitle,
     });
   };
 
-  const receiveBody = (body: Descendant[]) => {
+  function receiveBody(body: Descendant[]) {
     threadReduceDispatch({
       type: "bodyNode",
       payload: body,
@@ -175,9 +175,9 @@ const Thread = () => {
     });
   }; 
 
-  const onClickPost = async (
+  async function onClickPost(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  ) {
     e.preventDefault();
     if (!userId || userId === "0")
       setPostMsg("You must be logged in before you can post.");
@@ -240,11 +240,18 @@ const Thread = () => {
             readOnly={thread ? readOnly : false}
             sendOutTitle={receiveTitle}
           />
-          <ThreadBody
-            body={thread ? thread?.body : ""}
-            readOnly={thread ? readOnly : false}
-            sendOutBody={receiveBody}
-          /> 
+          {!id ? (
+            <ThreadBody
+              readOnly={false}
+              sendOutBody={receiveBody}
+            />
+          ) : (
+            thread && <ThreadBody
+              body={thread.body}
+              readOnly={readOnly}
+              sendOutBody={receiveBody}
+            />
+          )}
           {thread ? null : (
             <>
               <div style={{ marginTop: ".5em" }}>

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect, FC } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Editable, withReact, useSlate, Slate } from "slate-react";
 import { 
   Editor,
@@ -37,13 +37,15 @@ const HOTKEYS: { [keyName: string]: string } = {
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
-const INITIAL_VALUE: Descendant = {
-  type: "paragraph",
-  children: [{text: ""}],
-};
+const INITIAL_VALUE: Descendant[] = [
+  {
+    type: "paragraph",
+    children: [{text: ""}],
+  },
+];
 
-function initValue(val: string | undefined): Descendant[] {
-  return val ? [{...INITIAL_VALUE, children: [{text: val}]}] : [INITIAL_VALUE];
+function parseValue(val?: string): Descendant[] {
+  return val && val.length > 0 ? JSON.parse(val) : INITIAL_VALUE;
 } 
 
 class RichEditorProps {
@@ -52,21 +54,17 @@ class RichEditorProps {
   sendOutBody?: (body: Descendant[]) => void;
 }
 
-const RichEditor: FC<RichEditorProps> = ({ 
+function RichEditor({ 
   existingBody,
   readOnly,
   sendOutBody,
-}) => {
-  const [value, setValue] = useState<Descendant[]>(() => initValue(existingBody));
+}: RichEditorProps) {
+  const [value, setValue] = useState<Descendant[]>(() => parseValue(existingBody));
   const renderElement = useCallback((props: any) => <Element {...props} />, []);
   const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
   const editor = useMemo(() => withHistory(withReact(createEditor())), []); 
 
-  useEffect(() => {
-    setValue(initValue(existingBody));
-  }, [existingBody]);
-
-  const onChangeEditorValue = (value: Descendant[]) => {
+  function onChangeEditorValue(value: Descendant[]) {
     setValue(value);
     sendOutBody && sendOutBody(value);
   };
