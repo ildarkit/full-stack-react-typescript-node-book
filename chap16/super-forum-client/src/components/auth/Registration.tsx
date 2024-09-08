@@ -1,4 +1,4 @@
-import React, {FC, useReducer} from 'react';
+import {useReducer} from 'react';
 import ReactModal from 'react-modal';
 import './Registration.css';
 import {ModalProps} from '../types/ModalProps';
@@ -6,7 +6,7 @@ import {userReducer} from '../auth/common/UserReducer';
 import {allowSubmit} from '../auth/common/Helpers'; 
 import PasswordComparison from './common/PasswordComparison';
 
-const Registration: FC<ModalProps> = ({isOpen, onClickToggle}) => {
+function Registration({isOpen, onClickToggle}: ModalProps) {
   const [
     {userName, password, email, passwordConfirm, isSubmitDisabled, resultMsg},
     dispatch,
@@ -19,24 +19,24 @@ const Registration: FC<ModalProps> = ({isOpen, onClickToggle}) => {
     resultMsg: "",
   });
 
-  const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function onChangeUserName(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch({payload: e.target.value, type: "userName"});
     if (!e.target.value) allowSubmit(dispatch, "Username cannot be empty", true)
     else allowSubmit(dispatch, "", false);
   };
 
-  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function onChangeEmail(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch({payload: e.target.value, type: "email"});
     if (!e.target.value) allowSubmit(dispatch, "Email cannot be empty", true)
     else allowSubmit(dispatch, "", false);
   }; 
 
-  const onClickRegister = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  function onClickRegister(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
     onClickToggle(e);
   };
 
-  const onClickCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  function onClickCancel(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     onClickToggle(e);
   };
 

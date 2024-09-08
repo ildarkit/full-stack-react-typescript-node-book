@@ -88,7 +88,7 @@ const threadReducer = (state: any, action: any) => {
   }
 };
 
-const Thread = () => {
+function Thread() {
   const {width} = useWindowDimensions();
   const [
     execGetThreadById,

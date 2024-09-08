@@ -1,4 +1,3 @@
-import React, { FC } from "react";
 import RichEditor from "../../editor/RichEditor";
 import { Descendant } from "slate";
 
@@ -8,11 +7,11 @@ interface ThreadBodyProps {
   sendOutBody: (body: Descendant[]) => void;
 }
 
-const ThreadBody: FC<ThreadBodyProps> = ({
+function ThreadBody({
   body,
   readOnly,
   sendOutBody
-}) => {
+}: ThreadBodyProps) {
   return (
     <div className="thread-body-container">
       <strong>Body</strong>

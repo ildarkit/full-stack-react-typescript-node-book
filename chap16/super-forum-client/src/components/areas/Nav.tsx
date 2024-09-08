@@ -10,7 +10,7 @@ const Nav = () => {
   const [showMenu, setShowMenu] = useState(false);
   const {width} = useWindowDimensions();
 
-  const getMobileMenu = () => {
+  function getMobileMenu() {
     if (width <= 768)
       return (
         <FontAwesomeIcon
@@ -23,13 +23,13 @@ const Nav = () => {
     return null;
   };
 
-  const onClickToggle = (e: React.MouseEvent<Element, MouseEvent>) => {
+  function onClickToggle(e: React.MouseEvent<Element, MouseEvent>) {
     setShowMenu(!showMenu);
   };
 
-  const onRequestClose = (
+  function onRequestClose(
     e: React.MouseEvent<Element, MouseEvent> | React.KeyboardEvent<Element>
-  ) => {
+  ) {
     setShowMenu(false);
   };
 

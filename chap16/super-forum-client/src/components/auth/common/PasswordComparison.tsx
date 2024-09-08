@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { allowSubmit } from "./Helpers";
 import {
   isPasswordValid,
@@ -11,12 +10,12 @@ interface PasswordComparisonProps {
   passwordConfirm: string;
 }
 
-const PasswordComparison: FC<PasswordComparisonProps> = ({
+function PasswordComparison({
   dispatch,
   password,
   passwordConfirm,
-}) => {
-  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+}: PasswordComparisonProps) {
+  function onChangePassword (e: React.ChangeEvent<HTMLInputElement>) {
     dispatch({ payload: e.target.value, type: "password" });
     const passwordCheck: PasswordTestResult = isPasswordValid(e.target.value);
 
@@ -26,11 +25,11 @@ const PasswordComparison: FC<PasswordComparisonProps> = ({
     }
     passwordsSame(passwordConfirm, e.target.value);
   };
-  const onChangePasswordConfirm = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function onChangePasswordConfirm(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch({ payload: e.target.value, type: "passwordConfirm" });
     passwordsSame(password, e.target.value);
   };
-  const passwordsSame = (passwordVal: string, passwordConfirmVal: string) => {
+  function passwordsSame(passwordVal: string, passwordConfirmVal: string) {
     if (passwordVal !== passwordConfirmVal) {
       allowSubmit(dispatch, "Passwords do not match", true);
       return false;

@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import DropDown, {Option} from 'react-dropdown';
@@ -18,11 +18,11 @@ class CategoryDropDownProps {
   preselectedCategory?: Category; 
 }
 
-const CategoryDropDown: FC<CategoryDropDownProps> = ({
+function CategoryDropDown({
   sendOutSelectedCategory,
   navigate,
   preselectedCategory,
-}) => {
+}: CategoryDropDownProps) {
   const categories = useSelector((state: AppState) => state.categories);
   const [categoryOptions, setCategoryOptions] = 
     useState<Array<string | Option>>([defaultOption]);
@@ -46,7 +46,7 @@ const CategoryDropDown: FC<CategoryDropDownProps> = ({
     }
   }, [categories, preselectedCategory]);
 
-  const onChangeDropDown = (selected: Option) => {
+  function onChangeDropDown(selected: Option) {
     setSelectedOption(selected);
     if (sendOutSelectedCategory)
       sendOutSelectedCategory(

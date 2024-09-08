@@ -7,10 +7,10 @@ export interface CategoryAction {
   payload: Array<Category> | null;
 }
 
-export const ThreadCategoriesReducer = (
+export function ThreadCategoriesReducer(
   state: any = null,
   action: CategoryAction
-): Array<Category> | null => {
+): Array<Category> | null {
   switch (action.type) {
     case ThreadCategoriesType:
       return action.payload;

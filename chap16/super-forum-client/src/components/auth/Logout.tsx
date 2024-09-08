@@ -1,4 +1,3 @@
-import React, { FC } from "react";
 import ReactModal from "react-modal";
 import {gql, useMutation} from '@apollo/client';
 import {useSelector} from 'react-redux';
@@ -13,7 +12,7 @@ const LogoutMutation = gql`
   }
 `;
 
-const Logout: FC<ModalProps> = ({ isOpen, onClickToggle }) => { 
+function Logout({ isOpen, onClickToggle }: ModalProps) { 
   const user = useSelector((state: AppState) => state.user);
   const [execLogout] = useMutation(LogoutMutation, {
     refetchQueries: [
@@ -22,7 +21,7 @@ const Logout: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
   });
   const {deleteMe} = useRefreshReduxMe();
 
-  const onClickLogout = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  async function onClickLogout(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
     onClickToggle(e);
     await execLogout({
@@ -33,7 +32,7 @@ const Logout: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
     deleteMe();
   };
 
-  const onClickCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  function onClickCancel(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     onClickToggle(e);
   };
 

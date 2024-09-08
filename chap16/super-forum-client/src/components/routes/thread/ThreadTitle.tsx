@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 interface ThreadTitleProps {
   title?: string;
@@ -6,19 +6,19 @@ interface ThreadTitleProps {
   sendOutTitle: (title: string) => void;
 }
 
-const ThreadTitle: FC<ThreadTitleProps> = ({
+function ThreadTitle({
   title,
   readOnly,
   sendOutTitle,
-}) => {
+}: ThreadTitleProps) {
   const [currentTitle, setCurrentTitle] = useState("");
   useEffect(() => {
     setCurrentTitle(title || "");
   }, [title]);
 
-  const onChangeTitle = (
+  function onChangeTitle(
     e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  ) {
     setCurrentTitle(e.target.value);
     sendOutTitle(e.target.value);
   };

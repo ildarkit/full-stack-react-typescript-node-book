@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ThreadItem from "../../../models/ThreadItem";
 import ThreadResponse from "./ThreadResponse";
 
@@ -8,14 +8,14 @@ interface ThreadResponsesBuilderProps {
   refreshThread?: () => void;
 }
 
-const ThreadResponsesBuilder: FC<ThreadResponsesBuilderProps> = ({
+function ThreadResponsesBuilder({
   threadItems,
   readOnly,
   refreshThread,
-}) => {
+}: ThreadResponsesBuilderProps) {
   const [responseElements, setResponseElements] = useState<
-    JSX.Element | undefined
-  >();
+    JSX.Element | null
+  >(null);
 
   useEffect(() => {
     if (threadItems) {
@@ -35,7 +35,8 @@ const ThreadResponsesBuilder: FC<ThreadResponsesBuilderProps> = ({
           </li>
         );
       });
-      setResponseElements(<ul>{thResponses}</ul>);
+      if (thResponses.length > 0)
+        setResponseElements(<ul>{thResponses}</ul>);
     }
   }, [threadItems, readOnly]);
 

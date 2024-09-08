@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { getTimePastIfLessThanDay } from "../../../common/dates";
 
 interface UserNameAndTimeProps {
@@ -6,10 +5,10 @@ interface UserNameAndTimeProps {
   lastModifiedOn?: Date;
 }
 
-const UserNameAndTime: FC<UserNameAndTimeProps> = ({
+function UserNameAndTime({
   userName,
   lastModifiedOn,
-}) => {
+}: UserNameAndTimeProps) {
   return (
     <span>
       <strong>{userName}</strong>

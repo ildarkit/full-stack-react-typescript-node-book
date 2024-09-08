@@ -1,10 +1,9 @@
-import React, { FC, useReducer, useEffect } from "react";
+import React, { useReducer } from "react";
 import ReactModal from "react-modal";
 import {gql, useMutation} from '@apollo/client';
 import {ModalProps} from "../types/ModalProps";
 import {userReducer} from "./common/UserReducer";
 import { allowSubmit } from "./common/Helpers";
-import { UserProfileSetType } from "../../store/user/Reducer";
 import useRefreshReduxMe, {Me} from "../../hooks/useRefreshReduxMe";
 
 const LoginMutation = gql`
@@ -13,7 +12,7 @@ const LoginMutation = gql`
   }
 `;
 
-const Login: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
+function Login({ isOpen, onClickToggle }: ModalProps) {
   const [execLogin] = useMutation(LoginMutation, {
     refetchQueries: [
       {
@@ -32,24 +31,24 @@ const Login: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
   });
   const {execMe, updateMe} = useRefreshReduxMe();
 
-  const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function onChangeUserName(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch({ type: "userName", payload: e.target.value });
     if (!e.target.value)
       allowSubmit(dispatch, "Username cannot be empty", true);
     else allowSubmit(dispatch, "", false);
   };
 
-  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function onChangePassword(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch({ type: "password", payload: e.target.value });
     if (!e.target.value)
       allowSubmit(dispatch, "Password cannot be empty", true);
     else allowSubmit(dispatch, "", false);
   };
 
-  const onClickLogin = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  async function onClickLogin(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
     onClickToggle(e);
-    const result = await execLogin({
+    await execLogin({
       variables: {
         userName,
         password,
@@ -59,9 +58,9 @@ const Login: FC<ModalProps> = ({ isOpen, onClickToggle }) => {
     updateMe();
   };
 
-  const onClickCancel = (
+  function onClickCancel(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  ) {
     onClickToggle(e);
   };
 

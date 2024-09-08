@@ -1,4 +1,3 @@
-import { FC } from "react";
 import UserNameAndTime from "./UserNameAndTime";
 
 interface ThreadHeaderProps {
@@ -7,11 +6,11 @@ interface ThreadHeaderProps {
   title?: string;
 }
 
-const ThreadHeader: FC<ThreadHeaderProps> = ({
+function ThreadHeader({
   userName,
   lastModifiedOn,
   title,
-}) => {
+}: ThreadHeaderProps) {
   return (
     <div className="thread-header-container">
       <h3>{title}</h3>

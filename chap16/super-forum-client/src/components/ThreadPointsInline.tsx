@@ -1,4 +1,3 @@
-import React, { FC } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -29,22 +28,22 @@ class ThreadPointsInlineProps {
   refreshThread?: () => void;
 }
 
-const ThreadPointsInline: FC<ThreadPointsInlineProps> = ({
+function ThreadPointsInline({
   points,
   threadId,
   threadItemId,
   allowUpdatePoints,
   refreshThread,
-}) => {
+}: ThreadPointsInlineProps) {
   const [execUpdateThreadItemPoint] = useMutation(UpdateThreadItemPoint);
   const {onClickDecThreadPoint, onClickIncThreadPoint} = useUpdateThreadPoint(
     refreshThread,
     threadId,
   );
 
-  const onClickIncThreadItemPoint = async (
+  async function onClickIncThreadItemPoint(
     e: React.MouseEvent<SVGSVGElement, MouseEvent>
-  ) => {
+  ) {
     e.preventDefault();
     await execUpdateThreadItemPoint({
       variables: {
@@ -55,9 +54,9 @@ const ThreadPointsInline: FC<ThreadPointsInlineProps> = ({
     refreshThread && refreshThread();
   };
 
-  const onClickDecThreadItemPoint = async (
+  async function onClickDecThreadItemPoint(
     e: React.MouseEvent<SVGSVGElement, MouseEvent>
-  ) => {
+  ) {
     e.preventDefault();
     await execUpdateThreadItemPoint({
       variables: {

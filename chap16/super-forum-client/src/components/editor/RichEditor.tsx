@@ -24,7 +24,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./RichEditor.css";
 
-export const getTextFromNodes = (nodes: Node[]) => {
+export function getTextFromNodes(nodes: Node[]) {
   return nodes.map((n: Node) => Node.string(n)).join("\n");
 }; 
 
@@ -105,7 +105,7 @@ function RichEditor({
   );
 };
 
-const MarkButton = ({ format, icon }: { format: string; icon: string }) => {
+function MarkButton({ format, icon }: { format: string; icon: string }) {
   const editor = useSlate();
   let thisIcon = faBold;
   if (icon === "italic") {
@@ -128,12 +128,12 @@ const MarkButton = ({ format, icon }: { format: string; icon: string }) => {
   );
 };
 
-const isMarkActive = (editor: Editor, format: string) => {
+function isMarkActive(editor: Editor, format: string) {
   const marks: any = Editor.marks(editor);
   return marks ? marks[format] === true : false;
 };
 
-const toggleMark = (editor: Editor, format: string) => {
+function toggleMark(editor: Editor, format: string) {
   const isActive = isMarkActive(editor, format);
 
   if (isActive) {
@@ -143,7 +143,7 @@ const toggleMark = (editor: Editor, format: string) => {
   }
 };
 
-const BlockButton = ({ format, icon }: { format: string; icon: string }) => {
+function BlockButton({ format, icon }: { format: string; icon: string }) {
   const editor = useSlate();
   let thisIcon = faHeading;
   if (icon === "heading1") {
@@ -170,7 +170,7 @@ const BlockButton = ({ format, icon }: { format: string; icon: string }) => {
   );
 };
 
-const isBlockActive = (editor: Editor, format: string) => {
+function isBlockActive(editor: Editor, format: string) {
   const {selection} = editor;
   if (!selection) return false;
 
@@ -187,7 +187,7 @@ const isBlockActive = (editor: Editor, format: string) => {
   return !!match;
 };
 
-const toggleBlock = (editor: Editor, format: string) => {
+function toggleBlock(editor: Editor, format: string) {
   const isActive = isBlockActive(editor, format);
   const isList = LIST_TYPES.includes(format);
 
@@ -209,7 +209,7 @@ const toggleBlock = (editor: Editor, format: string) => {
   }
 };
 
-const Element = ({
+function Element({
   attributes,
   children,
   element,
@@ -217,7 +217,7 @@ const Element = ({
   attributes: any;
   children: any;
   element: any;
-}) => {
+}) {
   switch (element.type) {
     case "block-quote":
       return <blockquote {...attributes}>{children}</blockquote>;
@@ -236,7 +236,7 @@ const Element = ({
   }
 };
 
-const Leaf = ({
+function Leaf({
   attributes,
   children,
   leaf,
@@ -244,7 +244,7 @@ const Leaf = ({
   attributes: any;
   children: any;
   leaf: any;
-}) => {
+}) {
   if (leaf.bold) {
     children = <strong>{children}</strong>;
   }

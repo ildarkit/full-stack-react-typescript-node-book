@@ -1,4 +1,3 @@
-import { FC } from "react";
 import Category from "../../../models/Category";
 import CategoryDropDown from "../../CategoryDropDown";
 
@@ -7,10 +6,10 @@ interface ThreadCategoryProps {
   sendOutSelectedCategory: (cat: Category) => void;
 }
 
-const ThreadCategory: FC<ThreadCategoryProps> = ({
+function ThreadCategory({
   category,
   sendOutSelectedCategory
-}) => {
+}: ThreadCategoryProps) {
   return (
     <div className="thread-category-container">
       <strong>{category?.name}</strong>

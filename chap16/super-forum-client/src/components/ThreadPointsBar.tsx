@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
   faHeart,
@@ -17,13 +16,13 @@ export class ThreadPointsBarProps {
   refreshThread?: () => void;
 }
 
-const ThreadPointsBar: FC<ThreadPointsBarProps> = ({
+function ThreadPointsBar({
   points,
   responseCount,
   threadId,
   allowUpdatePoints,
   refreshThread,
-}) => {
+}: ThreadPointsBarProps) {
   const { width } = useWindowDimensions();
   const { onClickDecThreadPoint, onClickIncThreadPoint } = useUpdateThreadPoint(
     refreshThread,

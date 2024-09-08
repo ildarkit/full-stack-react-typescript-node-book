@@ -1,4 +1,3 @@
-import {FC} from 'react';
 import './ThreadCard.css';
 import Thread from '../../../models/Thread';
 import {Link, useNavigate} from 'react-router-dom';
@@ -13,15 +12,15 @@ interface ThreadCardProps {
   thread: Thread;
 }
 
-const ThreadCard: FC<ThreadCardProps> = ({thread}) => {
+function ThreadCard({thread}: ThreadCardProps) {
   const navigate = useNavigate();
   const {width} = useWindowDimensions();
 
-  const onClickShowThread = (e: React.MouseEvent<HTMLDivElement>) => {
+  function onClickShowThread(e: React.MouseEvent<HTMLDivElement>) {
     navigate("/thread/" + thread.id);
   }; 
 
-  const getResponses = (thread: Thread) => {
+  function getResponses(thread: Thread) {
     if (width <= 768) {
       return (
         <label

@@ -7,10 +7,10 @@ export interface UserProfileAction {
   payload: User | null;
 }
 
-export const UserProfileReducer = (
+export function UserProfileReducer(
   state: any = null,
   action: UserProfileAction
-): User | null => {
+): User | null {
   switch (action.type) {
     case UserProfileSetType:
       return action.payload;

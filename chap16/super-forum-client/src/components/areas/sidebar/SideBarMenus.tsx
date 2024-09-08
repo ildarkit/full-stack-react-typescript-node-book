@@ -20,15 +20,15 @@ const SideBarMenus = () => {
   const [showLogout, setShowLogout] = useState(false);
   const user = useSelector((state: AppState) => state.user);
 
-  const onClickToggleRegister = () => {
+  function onClickToggleRegister() {
     setShowRegister(!showRegister);
   };
 
-  const onClickToggleLogin = () => {
+  function onClickToggleLogin() {
     setShowLogin(!showLogin);
   };
 
-  const onClickToggleLogout = () => {
+  function onClickToggleLogout() {
     setShowLogout(!showLogout);
   };
 

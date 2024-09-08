@@ -94,7 +94,6 @@ const Main = () => {
   }, [categoryId]);
 
   useEffect(() => {
-    console.log("main threadsByCatData", threadsByCatData);
     if (
       threadsByCatData &&
       threadsByCatData.getThreadsByCategoryId &&

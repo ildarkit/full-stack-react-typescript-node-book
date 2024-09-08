@@ -1,8 +1,6 @@
 import {createStore} from "redux";
 import {rootReducer} from "./AppState";
 
-const configureStore = () => {
+export default function configureStore() {
   return createStore(rootReducer, {});
 };
-
-export default configureStore;

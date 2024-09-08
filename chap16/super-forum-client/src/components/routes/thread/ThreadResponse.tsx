@@ -1,4 +1,3 @@
-import { FC } from "react";
 import RichEditor from "../../editor/RichEditor";
 import UserNameAndTime from "./UserNameAndTime";
 import ThreadPointsInline from '../../ThreadPointsInline';
@@ -12,14 +11,14 @@ interface ThreadResponseProps {
   threadItemId: string;
 }
 
-const ThreadResponse: FC<ThreadResponseProps> = ({
+function ThreadResponse({
   body,
   userName,
   lastModifiedOn,
   points,
   readOnly,
   threadItemId,
-}) => {
+}: ThreadResponseProps) {
   return (
     <div>
       <div>
