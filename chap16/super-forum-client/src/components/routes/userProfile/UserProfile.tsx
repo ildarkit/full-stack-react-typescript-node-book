@@ -9,6 +9,7 @@ import { AppState } from "../../../store/AppState";
 import Thread from "../../../models/Thread";
 import { Link } from "react-router-dom";
 import ThreadItem from "../../../models/ThreadItem";
+import { getTextFromNodes } from "../../editor/RichEditor";
 
 const ChangePassword = gql`
   mutation ChangePassword($newPassword: String!) {
@@ -56,13 +57,19 @@ const UserProfile = () => {
           <ul>{threadList}</ul>
       ));
 
-      const threadItemList = user.threadItems?.map((ti: ThreadItem) => (
-        <li key={`user-ti-${ti.id}`}>
-          <Link to={`/thread/${ti.thread.id}`} className="userprofile-link">
-            {ti.body.length <= 40 ? ti.body : ti.body.substring(0, 40) + " ..."}
-          </Link>
-        </li>
-      ));
+      const threadItemList = user.threadItems?.map((ti: ThreadItem) => {
+        const textBody = getTextFromNodes(JSON.parse(ti.body)); 
+        return (
+          <li key={`user-ti-${ti.id}`}>
+            <Link to={`/thread/${ti.thread.id}`} className="userprofile-link">
+              {ti.body.length <= 40 ?
+                textBody :
+                textBody.substring(0, 40) + " ..."
+              }
+            </Link>
+          </li>
+        );
+      });
       setThreadItems(
         !user.threadItems || user.threadItems.length === 0 ? undefined : (
           <ul>{threadItemList}</ul>
