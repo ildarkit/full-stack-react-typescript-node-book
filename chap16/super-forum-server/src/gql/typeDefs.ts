@@ -79,6 +79,14 @@ const typeDefs = `#graphql
     lastModifiedOn: Date!
   }
 
+  type CategoryThread {
+    threadId: ID!
+    categoryId: ID!
+    categoryName: String!
+    title: String!
+    titleCreatedOn: Date!
+  }
+
   type Query {
     getThreadById(id: ID!): ThreadResult
     getThreadsByCategoryId(categoryId: ID!): ThreadArrayResult!
@@ -86,6 +94,7 @@ const typeDefs = `#graphql
     me: UserResult!
     getAllCategories: [ThreadCategory!]
     getThreadsLatest: ThreadArrayResult!
+    getTopCategoryThread: [CategoryThread!]
   }
 
   type Mutation {

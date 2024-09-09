@@ -22,6 +22,8 @@ import {
   UserResult
 } from '../repo/UserRepo';
 import {getAllCategories} from '../repo/ThreadCategoryRepo';
+import { getTopCategoryThread } from '../repo/CategoryThreadRepo'; 
+import CategoryThread from '../repo/CategoryThread';
 
 const UNKNOWN_ERROR = "An error has occured";
 
@@ -198,7 +200,21 @@ const resolvers = {
         throw ex;
       }
     },
+
+    getTopCategoryThread: async (
+      obj: any,
+      args: null,
+      ctx: GqlContext,
+      info: any
+    ): Promise<Array<CategoryThread>> => {
+      try {
+        return await getTopCategoryThread(); 
+      } catch (ex) {
+        throw ex;
+      }
+    },
   },
+
   Mutation: {
     createThread: async (
       obj: any,
