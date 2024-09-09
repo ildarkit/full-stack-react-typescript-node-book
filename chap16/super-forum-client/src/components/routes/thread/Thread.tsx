@@ -10,6 +10,7 @@ import ThreadTitle from "./ThreadTitle";
 import ThreadModel from "../../../models/Thread";
 import Nav from "../../areas/Nav";
 import ThreadBody from './ThreadBody';
+import ThreadResponse from './ThreadResponse';
 import ThreadResponsesBuilder from "./ThreadResponsesBuilder";
 import ThreadPointsBar from '../../ThreadPointsBar';
 import { getTextFromNodes } from '../../editor/RichEditor';
@@ -43,6 +44,9 @@ const GetThreadById = gql`
           id
           body
           points
+          thread {
+            id
+          }
           user {
             id
             userName
@@ -278,14 +282,32 @@ function Thread() {
         </div>
       </div>
       {thread ? (
-        <div className="thread-content-response-container">
-          <hr className="thread-section-divider" />
-          <ThreadResponsesBuilder 
-            threadItems={thread?.threadItems}
-            readOnly={readOnly}
-            refreshThread={refreshThread}
-          />
-        </div>
+        <>
+          <div className="thread-content-response-container">
+            <hr className="thread-section-divider" />
+            <div style={{ marginBottom: ".5em" }}>
+              <strong>Post Response</strong>
+            </div>
+            <ThreadResponse
+              body={""}
+              userName={user?.userName}
+              lastModifiedOn={new Date()}
+              points={0}
+              readOnly={false}
+              threadItemId={"0"}
+              threadId={thread.id}
+              refreshThread={refreshThread}
+            />
+          </div>
+          <div className="thread-content-response-container">
+            <hr className="thread-section-divider" />
+            <ThreadResponsesBuilder 
+              threadItems={thread?.threadItems}
+              readOnly={readOnly}
+              refreshThread={refreshThread}
+            />
+          </div>
+        </>
       ) : null}
     </div>
   );

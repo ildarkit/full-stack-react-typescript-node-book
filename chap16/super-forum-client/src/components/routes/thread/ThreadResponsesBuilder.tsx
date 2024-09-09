@@ -4,7 +4,7 @@ import ThreadResponse from "./ThreadResponse";
 
 interface ThreadResponsesBuilderProps {
   threadItems?: Array<ThreadItem>;
-  readOnly?: boolean;
+  readOnly: boolean;
   refreshThread?: () => void;
 }
 
@@ -29,8 +29,8 @@ function ThreadResponsesBuilder({
               points={ti.points}
               readOnly={readOnly}
               threadItemId={ti?.id || "0"}
-              // threadId={ti.thread.id}
-              // refreshThread={refreshThread}
+              threadId={ti.thread.id}
+              refreshThread={refreshThread}
             />
           </li>
         );

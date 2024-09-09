@@ -56,10 +56,9 @@ const UserProfile = () => {
           <ul>{threadList}</ul>
       ));
 
-      // todo: threadId replace with thread.id
       const threadItemList = user.threadItems?.map((ti: ThreadItem) => (
         <li key={`user-ti-${ti.id}`}>
-          <Link to={`/thread/${ti.threadId}`} className="userprofile-link">
+          <Link to={`/thread/${ti.thread.id}`} className="userprofile-link">
             {ti.body.length <= 40 ? ti.body : ti.body.substring(0, 40) + " ..."}
           </Link>
         </li>
