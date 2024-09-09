@@ -62,7 +62,7 @@ const UserProfile = () => {
         return (
           <li key={`user-ti-${ti.id}`}>
             <Link to={`/thread/${ti.thread.id}`} className="userprofile-link">
-              {ti.body.length <= 40 ?
+              {textBody.length <= 40 ?
                 textBody :
                 textBody.substring(0, 40) + " ..."
               }
